@@ -1,8 +1,5 @@
-package by.it.medved.controllers.user;
+package by.it.medved.controllers.menu;
 
-import by.it.medved.entities.User;
-import by.it.medved.services.UserService;
-import by.it.medved.services.UserServiceImpl;
 import by.it.medved.util.Link;
 
 import javax.servlet.ServletException;
@@ -10,21 +7,24 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
-@WebServlet(urlPatterns = "/user/select")
-public class SelectUserController extends HttpServlet {
-
-    private final UserService userService = new UserServiceImpl();
+@WebServlet(urlPatterns = "/admin/edit/user")
+public class EditUserMenuController extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        HttpSession session = req.getSession();
-        Long userId = Long.parseLong(req.getParameter("userId"));
-        User selectedUser = userService.getUserById(userId);
-        session.setAttribute("selectedUser", selectedUser);
-        doGet(req, resp);
+        switch (req.getParameter("action")) {
+            case "editAccess" :
+                req.getRequestDispatcher("/pages/user/update-user-access.jsp").forward(req, resp);
+                break;
+            case "delete" :
+                req.getRequestDispatcher("/admin/user/delete").forward(req, resp);
+                break;
+            case "back" :
+                req.getRequestDispatcher("/admin/menu").forward(req, resp);
+                break;
+        }
     }
 
     @Override

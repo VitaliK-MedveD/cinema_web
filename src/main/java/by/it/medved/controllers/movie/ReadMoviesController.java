@@ -1,8 +1,9 @@
-package by.it.medved.controllers.user;
+package by.it.medved.controllers.movie;
 
+import by.it.medved.entities.Movie;
 import by.it.medved.entities.User;
-import by.it.medved.services.UserService;
-import by.it.medved.services.UserServiceImpl;
+import by.it.medved.services.MovieService;
+import by.it.medved.services.MovieServiceImpl;
 import by.it.medved.util.Link;
 
 import javax.servlet.ServletException;
@@ -14,17 +15,17 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.List;
 
-@WebServlet(urlPatterns = "/user/read")
-public class ReadUsersController extends HttpServlet {
+@WebServlet(urlPatterns = "/movie/read")
+public class ReadMoviesController extends HttpServlet {
 
-    private final UserService userService = new UserServiceImpl();
+    private final MovieService movieService = new MovieServiceImpl();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         HttpSession session = req.getSession();
-        List<User> users = userService.getAllUsers();
-        session.setAttribute("users", users);
-        req.getRequestDispatcher(Link.USERS_PAGE).forward(req, resp);
+        List<Movie> movies = movieService.getAllMovies();
+        session.setAttribute("movies", movies);
+        req.getRequestDispatcher("/pages/movie/read-movies.jsp").forward(req, resp);
     }
 
     @Override

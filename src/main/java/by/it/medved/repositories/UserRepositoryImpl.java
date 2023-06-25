@@ -111,7 +111,7 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    public boolean deleteById(Long id) {
+    public boolean deleteUserById(Long id) {
         try (Connection connection = ConnectionManager.open()) {
             PreparedStatement statement = connection.prepareStatement("DELETE FROM user WHERE id=?");
             statement.setLong(1, id);

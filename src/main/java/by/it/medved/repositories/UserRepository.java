@@ -13,5 +13,5 @@ public interface UserRepository {
     List<User> getAllUsers();
     boolean updateAccess(Long id, Access access);
     boolean updateUserFields(User user);
-    boolean deleteById(Long id);
+    boolean deleteUserById(Long id);
 }

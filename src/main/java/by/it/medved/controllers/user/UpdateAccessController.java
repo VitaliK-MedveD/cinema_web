@@ -26,9 +26,9 @@ public class UpdateAccessController extends HttpServlet {
         if (user.getAccess().equals(Access.ADMIN)) {
 
         }
-        Long id = Long.valueOf(req.getParameter("id"));
+        User selectedUser = (User) session.getAttribute("selectedUser");
         String access = req.getParameter("access");
-        userService.updateAccess(id, Access.valueOf(access));
+        userService.updateAccess(selectedUser.getId(), Access.valueOf(access));
         req.getRequestDispatcher(Link.USERS_READ_URI).forward(req, resp);
     }
 }

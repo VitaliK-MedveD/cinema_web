@@ -22,10 +22,10 @@ public class AdminMenuController extends HttpServlet {
                 req.getRequestDispatcher(Link.USER_EDIT_PAGE).forward(req, resp);
                 break;
             case "showListMovies" :
-                req.getRequestDispatcher("").forward(req, resp);
+                req.getRequestDispatcher("/movie/read").forward(req, resp);
                 break;
             case "addMovie" :
-                req.getRequestDispatcher("/movie/create").forward(req, resp);
+                req.getRequestDispatcher("/pages/movie/create-movie.jsp").forward(req, resp);
                 break;
             case "exit" :
                 req.getRequestDispatcher("/exit").forward(req, resp);

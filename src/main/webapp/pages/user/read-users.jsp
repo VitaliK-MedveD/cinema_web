@@ -44,8 +44,9 @@
 <table>
     <tbody>
     <tr>
-        <td><input type="submit" name="updateAccess" value="Change User Access" /></td>
-        <td><input type="submit" name="delete" value="Delete User" /></td>
+        <td><input type="submit" name="continue" value="Continue" /></td>
+    </tr>
+    <tr>
         <td><input type="button" onclick="location.href='/admin/menu'" value="Go Back"/></td>
     </tr>
     </tbody>

@@ -22,9 +22,8 @@
         </thead>
         <tbody>
         <tr>
-            <td>${userUpdateAccess.login}</td>
-            <td>${userUpdateAccess.access}</td>
-            <td><input name="id" type="hidden" value=${userUpdateAccess.id}></td>
+            <td>${selectedUser.login}</td>
+            <td>${selectedUser.access}</td>
             <td><select name="access">
                 <option selected="selected" value="USER">User</option>
                 <option value="MANAGER">Manager</option>

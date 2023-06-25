@@ -29,6 +29,13 @@ public class CreateUserController extends HttpServlet {
                 req.getParameter("email"),
                 req.getParameter("dateBirthday"));
         userService.createUser(user);
-        req.getRequestDispatcher(Link.USERS_READ_URI).forward(req, resp);
+        HttpSession session = req.getSession();
+        session.setAttribute("user", user);
+        doGet(req, resp);
+    }
+
+    @Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        req.getRequestDispatcher(Link.USER_MENU_PAGE).forward(req, resp);
     }
 }

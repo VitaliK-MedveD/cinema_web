@@ -29,7 +29,7 @@ public class SingInUserController extends HttpServlet {
         String password = req.getParameter("password");
         String errorMessage;
 
-        Optional<User> optionalUser = userService.getByLogin(login);
+        Optional<User> optionalUser = userService.getUserByLogin(login);
         if (optionalUser.isPresent()) {
             User user = optionalUser.get();
             if (encryptionService.authenticate(password, user.getPassword(), user.getSalt())) {

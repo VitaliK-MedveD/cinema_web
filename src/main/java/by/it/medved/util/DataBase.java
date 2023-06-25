@@ -4,7 +4,7 @@ public final class DataBase {
 
     public static final String ID = "id";
     public static final String MOVIE_ID = "movie_id";
-    public static final String PERSON_ID = "user_id";
+    public static final String USER_ID = "user_id";
     public static final String ACCESS = "access";
     public static final String LOGIN = "login";
     public static final String PASSWORD = "password";

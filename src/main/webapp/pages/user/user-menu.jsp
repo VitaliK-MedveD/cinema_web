@@ -14,10 +14,6 @@
 <body>
 <form action="/user/menu" method="post" >
     <p><u><b>Здравствуйте ${user.firstName}</b></u></p>
-<%--    <p><button onclick="location.href='personal_info.jsp'">Персональная информация</button></p>--%>
-<%--    <p><button onclick="location.href='orders.jsp'">Мои заказы</button></p>--%>
-<%--    <p><button name="action" value="showListMovies" >Show list movies</button></p>--%>
-<%--    <p><button name="action" value="viewingTickets" >Viewing tickets</button></p>--%>
     <p><button name="action" value="editProfile" >Edit profile</button></p>
     <p><button name="action" value="exit" >Exit</button></p>
 </form>

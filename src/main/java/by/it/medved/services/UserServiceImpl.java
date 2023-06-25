@@ -4,8 +4,6 @@ import by.it.medved.entities.Access;
 import by.it.medved.entities.User;
 import by.it.medved.repositories.UserRepository;
 import by.it.medved.repositories.UserRepositoryImpl;
-import by.it.medved.util.Link;
-import by.it.medved.util.Message;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -25,7 +23,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User getById(Long id) {
+    public User getUserById(Long id) {
         return userRepository.getById(id);
     }
 
@@ -50,12 +48,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public boolean deleteById(Long id) {
-        return userRepository.deleteById(id);
+    public boolean deleteUserById(Long id) {
+        return userRepository.deleteUserById(id);
     }
 
     @Override
-    public Optional<User> getByLogin(String login) {
+    public Optional<User> getUserByLogin(String login) {
         List<User> users = getAllUsers();
         Optional<User> optionalUser = users.stream()
                 .filter(user -> user.getLogin().equals(login))

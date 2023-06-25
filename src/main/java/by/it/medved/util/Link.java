@@ -3,7 +3,9 @@ package by.it.medved.util;
 public final class Link {
 
     public static final String START_URI = "/start";
-        public static final String USER_CREATE_URI = "/user/create";
+    public static final String ADMIN_MENU_URI = "/admin/menu";
+    public static final String ADMIN_MENU_PAGE = "/pages/user/admin-menu.jsp";
+    public static final String USER_CREATE_URI = "/user/create";
     public static final String USER_MENU_URI = "/user/menu";
     public static final String USER_MENU_PAGE = "/pages/user/user-menu.jsp";
     public static final String USERS_READ_URI = "/user/read";

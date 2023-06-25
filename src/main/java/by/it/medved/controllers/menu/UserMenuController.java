@@ -28,6 +28,6 @@ public class UserMenuController extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        req.getRequestDispatcher(Link.USER_MENU_PAGE).forward(req, resp);
+        doPost(req, resp);
     }
 }

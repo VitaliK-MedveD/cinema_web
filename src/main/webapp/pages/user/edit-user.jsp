@@ -39,7 +39,7 @@
     </form>
         <tr>
         <c:choose>
-            <c:when test="${user.access == 'ADMIN' || user.access == 'MANAGER'}">
+            <c:when test="${user.access == 'ADMIN'}">
                 <td><button onclick="location.href='/admin/menu'">Go back</button></td>
             </c:when>
             <c:when test="${user.access == 'MANAGER'}">
@@ -49,7 +49,6 @@
                 <td><button onclick="location.href='/user/menu'">Go back</button></td>
             </c:when>
         </c:choose>
-<%--        <td><button onclick="history.back()">Go back</button></td>--%>
         </tr>
 </table>
 </body>

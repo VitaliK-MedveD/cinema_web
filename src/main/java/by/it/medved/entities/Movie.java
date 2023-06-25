@@ -19,8 +19,8 @@ public class Movie {
     private String movieTitle;
     private LocalDate showDate;
     private LocalTime showTime;
-    private Integer price;
-    private Integer ageLimit;
+    private int price;
+    private int ageLimit;
     private int freeTickets;
     private List<Ticket> tickets;
 
