@@ -26,7 +26,7 @@ public class Movie {
 
     public int getCountFreeTickets() {
         long count = tickets.stream()
-                .filter(ticket -> ticket.getUserId() == null)
+                .filter(ticket -> ticket.getUserId() == 0)
                 .count();
         return (int) count;
     }

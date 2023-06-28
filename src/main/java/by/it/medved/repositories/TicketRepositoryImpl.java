@@ -3,6 +3,7 @@ package by.it.medved.repositories;
 import by.it.medved.entities.Ticket;
 import by.it.medved.util.ConnectionManager;
 import by.it.medved.util.DataBase;
+import by.it.medved.util.SqlRequest;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -14,8 +15,7 @@ public class TicketRepositoryImpl implements TicketRepository{
     public boolean createTicket(Ticket ticket) {
         try (Connection connection = ConnectionManager.open()) {
             PreparedStatement statement =
-                    connection.prepareStatement("INSERT INTO ticket (movie_id, movie_title, show_date, " +
-                            "show_time, number_of_place, price) VALUES (?,?,?,?,?,?)");
+                    connection.prepareStatement(SqlRequest.CREATE_TICKET);
             statement.setLong(1, ticket.getMovieId());
             statement.setString(2, ticket.getMovieTitle());
             statement.setDate(3, Date.valueOf(ticket.getShowDate()));
@@ -33,8 +33,7 @@ public class TicketRepositoryImpl implements TicketRepository{
     public List<Ticket> getAllTickets(Long id, String columnName) {
         List<Ticket> tickets = new ArrayList<>();
         try (Connection connection = ConnectionManager.open()) {
-            PreparedStatement statement = connection.prepareStatement("SELECT * FROM ticket WHERE " +
-                    columnName + " =?");
+            PreparedStatement statement = connection.prepareStatement(SqlRequest.GET_ALL_TICKETS.replace("%s", columnName));
             statement.setLong(1, id);
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
@@ -50,8 +49,7 @@ public class TicketRepositoryImpl implements TicketRepository{
     @Override
     public boolean buyOrReturnTicket(Long ticketId, Long userId) {
         try (Connection connection = ConnectionManager.open()) {
-            PreparedStatement statement = connection.prepareStatement("UPDATE ticket SET user_id =? " +
-                    "WHERE id =?");
+            PreparedStatement statement = connection.prepareStatement(SqlRequest.BUY_OR_RETURN_TICKET);
             statement.setLong(1, userId);
             statement.setLong(2, ticketId);
             statement.execute();
@@ -64,8 +62,7 @@ public class TicketRepositoryImpl implements TicketRepository{
     @Override
     public boolean updateTicket(Ticket ticket) {
         try (Connection connection = ConnectionManager.open()) {
-            PreparedStatement statement = connection.prepareStatement("UPDATE ticket SET movie_id =?, person_id =?," +
-                    "movie_title =?, show_date =?, show_time =?, number_of_place =?, price =? WHERE id =?");
+            PreparedStatement statement = connection.prepareStatement(SqlRequest.UPDATE_TICKET);
             statement.setLong(1, ticket.getMovieId());
             statement.setLong(2, ticket.getUserId());
             statement.setString(3, ticket.getMovieTitle());
@@ -84,7 +81,7 @@ public class TicketRepositoryImpl implements TicketRepository{
     @Override
     public boolean deleteTicketById(Long id) {
         try (Connection connection = ConnectionManager.open()) {
-            PreparedStatement statement = connection.prepareStatement("DELETE FROM ticket WHERE id=?");
+            PreparedStatement statement = connection.prepareStatement(SqlRequest.DELETE_TICKET_BY_ID);
             statement.setLong(1, id);
             statement.execute();
             return true;

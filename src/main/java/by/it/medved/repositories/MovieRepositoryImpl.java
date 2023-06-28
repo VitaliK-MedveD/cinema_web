@@ -3,6 +3,7 @@ package by.it.medved.repositories;
 import by.it.medved.entities.Movie;
 import by.it.medved.util.ConnectionManager;
 import by.it.medved.util.DataBase;
+import by.it.medved.util.SqlRequest;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -14,8 +15,7 @@ public class MovieRepositoryImpl implements MovieRepository{
     public Movie createMovie(Movie movie) {
         try (Connection connection = ConnectionManager.open()) {
             PreparedStatement statement =
-                    connection.prepareStatement("INSERT INTO movie (movie_title, show_date, show_time, " +
-                            "price, age_limit) VALUES (?,?,?,?,?)");
+                    connection.prepareStatement(SqlRequest.CREATE_MOVIE);
             statement.setString(1, movie.getMovieTitle());
             statement.setDate(2, Date.valueOf(movie.getShowDate()));
             statement.setTime(3, Time.valueOf(movie.getShowTime()));
@@ -32,7 +32,7 @@ public class MovieRepositoryImpl implements MovieRepository{
     public Movie getMovieById(Long id) {
         try (Connection connection = ConnectionManager.open()) {
             Movie movie = new Movie();
-            PreparedStatement statement = connection.prepareStatement("SELECT * FROM movie WHERE id =?");
+            PreparedStatement statement = connection.prepareStatement(SqlRequest.GET_MOVIE_BY_ID);
             statement.setLong(1, id);
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
@@ -48,7 +48,7 @@ public class MovieRepositoryImpl implements MovieRepository{
     public Movie getMovieByTitle(String title) {
         try (Connection connection = ConnectionManager.open()) {
             Movie movie = new Movie();
-            PreparedStatement statement = connection.prepareStatement("SELECT * FROM movie WHERE movie_title =?");
+            PreparedStatement statement = connection.prepareStatement(SqlRequest.GET_MOVIE_BY_TITLE);
             statement.setString(1, title);
             ResultSet resultSet = statement.executeQuery();
             if (resultSet.next()) {
@@ -64,7 +64,7 @@ public class MovieRepositoryImpl implements MovieRepository{
     public List<Movie> getAllMovies() {
         List<Movie> movies = new ArrayList<>();
         try (Connection connection = ConnectionManager.open()) {
-            PreparedStatement statement = connection.prepareStatement("SELECT * FROM movie");
+            PreparedStatement statement = connection.prepareStatement(SqlRequest.GET_ALL_MOVIES);
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
                 Movie movie = buildMovieFromDatabase(resultSet);
@@ -79,8 +79,7 @@ public class MovieRepositoryImpl implements MovieRepository{
     @Override
     public Movie updateMovie(Movie movie) {
         try (Connection connection = ConnectionManager.open()) {
-            PreparedStatement statement = connection.prepareStatement("UPDATE movie SET show_date =?," +
-                    "show_time =?, price =?, age_limit =? WHERE id =?");
+            PreparedStatement statement = connection.prepareStatement(SqlRequest.UPDATE_MOVIE);
             statement.setDate(1, Date.valueOf(movie.getShowDate()));
             statement.setTime(2, Time.valueOf(movie.getShowTime()));
             statement.setInt(3, movie.getPrice());
@@ -97,7 +96,7 @@ public class MovieRepositoryImpl implements MovieRepository{
     public Movie deleteMovieById(Long id) {
         Movie movie = getMovieById(id);
         try (Connection connection = ConnectionManager.open()) {
-            PreparedStatement statement = connection.prepareStatement("DELETE FROM movie WHERE id=?");
+            PreparedStatement statement = connection.prepareStatement(SqlRequest.DELETE_MOVIE_BY_ID);
             statement.setLong(1, id);
             statement.execute();
             return movie;

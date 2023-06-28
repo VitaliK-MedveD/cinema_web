@@ -2,14 +2,28 @@ package by.it.medved.services;
 
 import by.it.medved.entities.Movie;
 import by.it.medved.entities.Ticket;
+import by.it.medved.entities.User;
 import by.it.medved.repositories.TicketRepository;
 import by.it.medved.repositories.TicketRepositoryImpl;
 
 import java.util.List;
+import java.util.Optional;
 
 public class TicketServiceImpl implements TicketService{
 
     private final TicketRepository ticketRepository = new TicketRepositoryImpl();
+    private static volatile TicketService ticketService;
+
+    public static TicketService getTicketService() {
+        if (ticketService == null) {
+            synchronized (UserService.class) {
+                if (ticketService == null) {
+                    ticketService = new TicketServiceImpl();
+                }
+            }
+        }
+        return ticketService;
+    }
 
     @Override
     public boolean createTenTickets(Movie movie) {
@@ -28,6 +42,17 @@ public class TicketServiceImpl implements TicketService{
     }
 
     @Override
+    public boolean buyTicket(User user, Movie movie) {
+        Optional<Ticket> freeTicket = movie.getTickets().stream()
+                .filter(ticket -> ticket.getUserId() == 0)
+                .findFirst();
+        if (freeTicket.isPresent()) {
+            Ticket ticket = freeTicket.get();
+            return ticketRepository.buyOrReturnTicket(ticket.getId(), user.getId());
+        } else return false;
+    }
+
+    @Override
     public List<Ticket> getAllTickets(Long id, String columnName) {
         return ticketRepository.getAllTickets(id, columnName);
     }
@@ -40,5 +65,8 @@ public class TicketServiceImpl implements TicketService{
     @Override
     public boolean deleteTicket(Ticket ticket) {
         return ticketRepository.deleteTicketById(ticket.getId());
+    }
+
+    private TicketServiceImpl() {
     }
 }

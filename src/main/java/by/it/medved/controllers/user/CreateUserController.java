@@ -3,8 +3,6 @@ package by.it.medved.controllers.user;
 import by.it.medved.entities.User;
 import by.it.medved.mappers.Mapper;
 import by.it.medved.services.UserService;
-import by.it.medved.services.UserServiceImpl;
-import by.it.medved.util.Link;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -14,28 +12,33 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
+import static by.it.medved.mappers.Mapper.getMapper;
+import static by.it.medved.services.UserServiceImpl.getUserService;
+import static by.it.medved.util.Link.*;
+import static by.it.medved.util.FieldsEntities.*;
+
 @WebServlet(urlPatterns = "/user/create")
 public class CreateUserController extends HttpServlet {
 
-    private final UserService userService = new UserServiceImpl();
-    private final Mapper userMapper = new Mapper();
+    private final UserService userService = getUserService();
+    private final Mapper userMapper = getMapper();
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         User user = userMapper.buildUser(
-                req.getParameter("login"),
-                req.getParameter("password"),
-                req.getParameter("firstName"),
-                req.getParameter("email"),
-                req.getParameter("dateBirthday"));
+                req.getParameter(LOGIN),
+                req.getParameter(PASSWORD),
+                req.getParameter(FIRST_NAME),
+                req.getParameter(EMAIL),
+                req.getParameter(DATE_BIRTHDAY));
         userService.createUser(user);
         HttpSession session = req.getSession();
-        session.setAttribute("user", user);
+        session.setAttribute(USER, user);
         doGet(req, resp);
     }
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        req.getRequestDispatcher(Link.USER_MENU_PAGE).forward(req, resp);
+        req.getRequestDispatcher(USER_MENU_PAGE).forward(req, resp);
     }
 }

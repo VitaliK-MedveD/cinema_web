@@ -4,10 +4,12 @@ import by.it.medved.entities.Access;
 import by.it.medved.entities.User;
 import by.it.medved.util.ConnectionManager;
 import by.it.medved.util.DataBase;
+import by.it.medved.util.SqlRequest;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+
 
 public class UserRepositoryImpl implements UserRepository {
 
@@ -15,8 +17,7 @@ public class UserRepositoryImpl implements UserRepository {
     public User createUser(User user) {
         try (Connection connection = ConnectionManager.open()) {
             PreparedStatement statement =
-                    connection.prepareStatement("INSERT INTO user (access, login, password, " +
-                            "first_name, email, date_birthday, date_created, salt) VALUES (?,?,?,?,?,?,?,?)");
+                    connection.prepareStatement(SqlRequest.USER_CREATE);
             statement.setString(1, user.getAccess().name());
             statement.setString(2, user.getLogin());
             statement.setBytes(3, user.getPassword());
@@ -36,7 +37,7 @@ public class UserRepositoryImpl implements UserRepository {
     public User getUserByLogin(String login) {
         try (Connection connection = ConnectionManager.open()) {
             User user = new User();
-            PreparedStatement statement = connection.prepareStatement("SELECT * FROM user WHERE login=?");
+            PreparedStatement statement = connection.prepareStatement(SqlRequest.GET_USER_BY_LOGIN);
             statement.setString(1, login);
             ResultSet resultSet = statement.executeQuery();
             if (resultSet.next()) {
@@ -49,10 +50,10 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    public User getById(Long id) {
+    public User getUserById(Long id) {
         try (Connection connection = ConnectionManager.open()) {
             User user = new User();
-            PreparedStatement statement = connection.prepareStatement("SELECT * FROM user WHERE id=?");
+            PreparedStatement statement = connection.prepareStatement(SqlRequest.GET_USER_BY_ID);
             statement.setLong(1, id);
             ResultSet resultSet = statement.executeQuery();
             if (resultSet.next()) {
@@ -68,7 +69,7 @@ public class UserRepositoryImpl implements UserRepository {
     public List<User> getAllUsers() {
         List<User> users = new ArrayList<>();
         try (Connection connection = ConnectionManager.open()) {
-            PreparedStatement statement = connection.prepareStatement("SELECT * FROM user");
+            PreparedStatement statement = connection.prepareStatement(SqlRequest.GET_ALL_USERS);
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
                 User user = buildUserFromDatabase(resultSet);
@@ -83,8 +84,7 @@ public class UserRepositoryImpl implements UserRepository {
     @Override
     public boolean updateAccess(Long id, Access access) {
         try (Connection connection = ConnectionManager.open()) {
-            PreparedStatement statement = connection.prepareStatement("UPDATE user SET access =? " +
-                    "WHERE id =?");
+            PreparedStatement statement = connection.prepareStatement(SqlRequest.UPDATE_ACCESS);
             statement.setString(1, access.name());
             statement.setLong(2, id);
             statement.execute();
@@ -97,8 +97,7 @@ public class UserRepositoryImpl implements UserRepository {
     @Override
     public boolean updateUserFields(User user) {
         try (Connection connection = ConnectionManager.open()) {
-            PreparedStatement statement = connection.prepareStatement("UPDATE user SET first_name =?, email =?," +
-                            "date_birthday =? WHERE id =?");
+            PreparedStatement statement = connection.prepareStatement(SqlRequest.UPDATE_USER_FIELDS);
             statement.setString(1, user.getFirstName());
             statement.setString(2, user.getEmail());
             statement.setDate(3, Date.valueOf(user.getDateBirthday()));
@@ -113,7 +112,7 @@ public class UserRepositoryImpl implements UserRepository {
     @Override
     public boolean deleteUserById(Long id) {
         try (Connection connection = ConnectionManager.open()) {
-            PreparedStatement statement = connection.prepareStatement("DELETE FROM user WHERE id=?");
+            PreparedStatement statement = connection.prepareStatement(SqlRequest.DELETE_USER_BY_ID);
             statement.setLong(1, id);
             statement.execute();
             return true;

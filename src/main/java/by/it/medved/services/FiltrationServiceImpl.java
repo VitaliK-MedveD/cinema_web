@@ -4,9 +4,11 @@ import by.it.medved.dto.UserFieldsValidationDto;
 import by.it.medved.util.Message;
 import by.it.medved.util.Regex;
 
+import static by.it.medved.services.UserServiceImpl.getUserService;
+
 public class FiltrationServiceImpl implements FiltrationService{
 
-    private final UserService userService = new UserServiceImpl();
+    private final UserService userService = getUserService();
     private UserFieldsValidationDto userFieldsValidationDto;
 
     @Override
@@ -49,7 +51,7 @@ public class FiltrationServiceImpl implements FiltrationService{
             userFieldsValidationDto.setPassword(password);
             return true;
         } else {
-            userFieldsValidationDto.setNotValidPassword("Not Valid Password");
+            userFieldsValidationDto.setNotValidPassword(Message.REGEX_PASSWORD);
             return false;
         }
     }
@@ -59,7 +61,7 @@ public class FiltrationServiceImpl implements FiltrationService{
             userFieldsValidationDto.setFirstName(firstName);
             return true;
         } else {
-            userFieldsValidationDto.setNotValidFirstName("Not Valid First Name");
+            userFieldsValidationDto.setNotValidFirstName(Message.REGEX_FIRST_NAME);
             return false;
         }
     }
@@ -69,7 +71,7 @@ public class FiltrationServiceImpl implements FiltrationService{
             userFieldsValidationDto.setEmail(email);
             return true;
         } else {
-            userFieldsValidationDto.setNotValidEmail("Not Valid Email");
+            userFieldsValidationDto.setNotValidEmail(Message.REGEX_EMAIL);
             return false;
         }
     }
@@ -79,7 +81,7 @@ public class FiltrationServiceImpl implements FiltrationService{
             userFieldsValidationDto.setDateBirthday(dateBirthday);
             return true;
         } else {
-            userFieldsValidationDto.setNotValidDateBirthday("Not Valid Date Birthday");
+            userFieldsValidationDto.setNotValidDateBirthday(Message.REGEX_DATE);
             return false;
         }
     }

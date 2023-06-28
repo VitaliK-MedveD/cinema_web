@@ -9,7 +9,7 @@ public interface UserRepository {
 
     User createUser (User user);
     User getUserByLogin(String login);
-    User getById(Long id);
+    User getUserById(Long id);
     List<User> getAllUsers();
     boolean updateAccess(Long id, Access access);
     boolean updateUserFields(User user);

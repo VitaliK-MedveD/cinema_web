@@ -8,10 +8,24 @@ import by.it.medved.util.DataBase;
 
 import java.util.List;
 
+import static by.it.medved.services.TicketServiceImpl.getTicketService;
+
 public class MovieServiceImpl implements MovieService{
 
     private final MovieRepository movieRepository = new MovieRepositoryImpl();
-    private final TicketService ticketService = new TicketServiceImpl();
+    private final TicketService ticketService = getTicketService();
+    private static volatile MovieService movieService;
+
+    public static MovieService getMovieService() {
+        if (movieService == null) {
+            synchronized (UserService.class) {
+                if (movieService == null) {
+                    movieService = new MovieServiceImpl();
+                }
+            }
+        }
+        return movieService;
+    }
 
     @Override
     public Movie createMovie(Movie movie) {
@@ -62,6 +76,13 @@ public class MovieServiceImpl implements MovieService{
 
     @Override
     public Movie deleteMovie(Movie movie) {
-        return null;
+        List<Ticket> tickets = movie.getTickets();
+        for (Ticket ticket : tickets) {
+            ticketService.deleteTicket(ticket);
+        }
+        return movieRepository.deleteMovieById(movie.getId());
+    }
+
+    private MovieServiceImpl() {
     }
 }

@@ -15,7 +15,18 @@ import java.util.regex.Pattern;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository = new UserRepositoryImpl();
-    private final EncryptionService encryptionService = new EncryptionServiceImpl();
+    private static volatile UserService userService;
+
+    public static UserService getUserService() {
+        if (userService == null) {
+            synchronized (UserService.class) {
+                if (userService == null) {
+                    userService = new UserServiceImpl();
+                }
+            }
+        }
+        return userService;
+    }
 
     @Override
     public User createUser(User user) {
@@ -24,7 +35,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User getUserById(Long id) {
-        return userRepository.getById(id);
+        return userRepository.getUserById(id);
     }
 
     @Override
@@ -39,7 +50,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User updateUserFields(Long id, String firstName, String email, String dateBirthday) {
-        User user = userRepository.getById(id);
+        User user = userRepository.getUserById(id);
         user.setFirstName(firstName);
         user.setEmail(email);
         user.setDateBirthday(LocalDate.parse(dateBirthday));
@@ -86,5 +97,8 @@ public class UserServiceImpl implements UserService {
                 .noneMatch(user -> user.getLogin().equalsIgnoreCase(login))) {
             return true;
         } else return false;
+    }
+
+    private UserServiceImpl() {
     }
 }

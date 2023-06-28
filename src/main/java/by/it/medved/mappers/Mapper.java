@@ -2,20 +2,28 @@ package by.it.medved.mappers;
 
 import by.it.medved.entities.Access;
 import by.it.medved.entities.Movie;
-import by.it.medved.entities.Ticket;
 import by.it.medved.entities.User;
 import by.it.medved.services.EncryptionService;
 import by.it.medved.services.EncryptionServiceImpl;
-import by.it.medved.util.Regex;
-import lombok.extern.slf4j.Slf4j;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
 
-@Slf4j
 public class Mapper {
 
     private final EncryptionService encryptionService = new EncryptionServiceImpl();
+    private static volatile Mapper mapper;
+
+    public static Mapper getMapper() {
+        if (mapper == null) {
+            synchronized (Mapper.class) {
+                if (mapper == null) {
+                    mapper = new Mapper();
+                }
+            }
+        }
+        return mapper;
+    }
 
     public User buildUser(String login, String password, String firstName, String email, String dateBirthday) {
         byte[] salt = encryptionService.generateSalt();
@@ -42,5 +50,8 @@ public class Mapper {
                 .ageLimit(Integer.parseInt(ageLimit))
                 .build();
         return movie;
+    }
+
+    private Mapper() {
     }
 }

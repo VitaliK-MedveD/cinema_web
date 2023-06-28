@@ -2,9 +2,6 @@ package by.it.medved.controllers.user;
 
 import by.it.medved.entities.User;
 import by.it.medved.services.UserService;
-import by.it.medved.services.UserServiceImpl;
-import by.it.medved.util.Link;
-import by.it.medved.util.Regex;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -13,29 +10,32 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
-import java.time.LocalDate;
+
+import static by.it.medved.services.UserServiceImpl.getUserService;
+import static by.it.medved.util.Link.*;
+import static by.it.medved.util.FieldsEntities.*;
 
 @WebServlet(urlPatterns = "/user/edit")
 public class EditUserController extends HttpServlet {
 
-    private final UserService userService = new UserServiceImpl();
+    private static final String UPDATE_PROFILE_SUCCESSFUL = "Update successful";
+    private final UserService userService = getUserService();
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         HttpSession session = req.getSession();
-        User user = (User) session.getAttribute("user");
-        String firstName = req.getParameter("firstName");
-        String email = req.getParameter("email");
-        String dateBirthday = req.getParameter("dateBirthday");
+        User user = (User) session.getAttribute(USER);
+        String firstName = req.getParameter(FIRST_NAME);
+        String email = req.getParameter(EMAIL);
+        String dateBirthday = req.getParameter(DATE_BIRTHDAY);
         user = userService.updateUserFields(user.getId(), firstName, email, dateBirthday);
-        session.setAttribute("user", user);
-        String updateProfileSuccessful = "Update successful";
-        session.setAttribute("updateProfileSuccessful", updateProfileSuccessful);
+        session.setAttribute(USER, user);
+        session.setAttribute(UPDATE_PROFILE_SUCCESSFUL, UPDATE_PROFILE_SUCCESSFUL);
         doGet(req, resp);
     }
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        req.getRequestDispatcher(Link.USER_EDIT_PAGE).forward(req, resp);
+        req.getRequestDispatcher(USER_EDIT_PAGE).forward(req, resp);
     }
 }

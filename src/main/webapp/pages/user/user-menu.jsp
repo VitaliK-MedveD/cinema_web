@@ -14,6 +14,7 @@
 <body>
 <form action="/user/menu" method="post" >
     <p><u><b>Здравствуйте ${user.firstName}</b></u></p>
+    <p><button name="action" value="showListMovies" >Show list Movies</button></p>
     <p><button name="action" value="editProfile" >Edit profile</button></p>
     <p><button name="action" value="exit" >Exit</button></p>
 </form>

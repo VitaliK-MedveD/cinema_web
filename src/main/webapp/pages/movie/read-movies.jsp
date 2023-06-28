@@ -45,17 +45,7 @@
             <td><input type="submit" name="continue" value="Continue" /></td>
         </tr>
         <tr>
-            <c:choose>
-                <c:when test="${user.access == 'ADMIN'}">
-                    <td><button onclick="location.href='/admin/menu'">Go back</button></td>
-                </c:when>
-                <c:when test="${user.access == 'MANAGER'}">
-                    <td><button onclick="location.href='/manager/menu'">Go back</button></td>
-                </c:when>
-                <c:when test="${user.access == 'USER'}">
-                    <td><button onclick="location.href='/user/menu'">Go back</button></td>
-                </c:when>
-            </c:choose>
+            <td><input type="button" onclick="history.back();" value="Go back"/></td>
         </tr>
         </tbody>
     </table>

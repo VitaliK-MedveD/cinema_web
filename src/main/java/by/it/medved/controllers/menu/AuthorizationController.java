@@ -1,7 +1,7 @@
 package by.it.medved.controllers.menu;
 
 import by.it.medved.entities.User;
-import by.it.medved.util.Link;
+import static by.it.medved.util.Link.*;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
-@WebServlet(urlPatterns = "/Authorization")
+@WebServlet(urlPatterns = "/authorization")
 public class AuthorizationController extends HttpServlet {
 
     @Override
@@ -25,13 +25,13 @@ public class AuthorizationController extends HttpServlet {
         User user = (User) session.getAttribute("user");
         switch (user.getAccess()) {
             case USER:
-                req.getRequestDispatcher(Link.USER_MENU_PAGE).forward(req, resp);
+                req.getRequestDispatcher(USER_MENU_PAGE).forward(req, resp);
                 break;
             case MANAGER:
-                req.getRequestDispatcher("/manager/menu").forward(req, resp);
+                req.getRequestDispatcher(MANAGER_MENU_PAGE).forward(req, resp);
                 break;
             case ADMIN:
-                req.getRequestDispatcher("/pages/user/admin-menu.jsp").forward(req, resp);
+                req.getRequestDispatcher(ADMIN_MENU_PAGE).forward(req, resp);
                 break;
         }
     }

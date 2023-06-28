@@ -1,10 +1,7 @@
 package by.it.medved.controllers.movie;
 
 import by.it.medved.entities.Movie;
-import by.it.medved.entities.User;
 import by.it.medved.services.MovieService;
-import by.it.medved.services.MovieServiceImpl;
-import by.it.medved.util.Link;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -15,17 +12,21 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.List;
 
-@WebServlet(urlPatterns = "/movie/read")
+import static by.it.medved.services.MovieServiceImpl.getMovieService;
+import static by.it.medved.util.Link.*;
+import static by.it.medved.util.FieldsEntities.*;
+
+@WebServlet(urlPatterns = "/movies/read")
 public class ReadMoviesController extends HttpServlet {
 
-    private final MovieService movieService = new MovieServiceImpl();
+    private final MovieService movieService = getMovieService();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         HttpSession session = req.getSession();
         List<Movie> movies = movieService.getAllMovies();
-        session.setAttribute("movies", movies);
-        req.getRequestDispatcher("/pages/movie/read-movies.jsp").forward(req, resp);
+        session.setAttribute(MOVIES, movies);
+        req.getRequestDispatcher(MOVIES_PAGE).forward(req, resp);
     }
 
     @Override

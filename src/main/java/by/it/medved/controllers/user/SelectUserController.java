@@ -2,8 +2,6 @@ package by.it.medved.controllers.user;
 
 import by.it.medved.entities.User;
 import by.it.medved.services.UserService;
-import by.it.medved.services.UserServiceImpl;
-import by.it.medved.util.Link;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -13,22 +11,28 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
+import static by.it.medved.services.UserServiceImpl.getUserService;
+import static by.it.medved.util.Link.*;
+import static by.it.medved.util.FieldsEntities.*;
+
+
+
 @WebServlet(urlPatterns = "/user/select")
 public class SelectUserController extends HttpServlet {
 
-    private final UserService userService = new UserServiceImpl();
+    private final UserService userService = getUserService();
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         HttpSession session = req.getSession();
-        Long userId = Long.parseLong(req.getParameter("userId"));
+        Long userId = Long.parseLong(req.getParameter(USER_ID));
         User selectedUser = userService.getUserById(userId);
-        session.setAttribute("selectedUser", selectedUser);
+        session.setAttribute(SELECTED_USER, selectedUser);
         doGet(req, resp);
     }
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        req.getRequestDispatcher("/pages/user/edit-user-menu.jsp").forward(req, resp);
+        req.getRequestDispatcher(EDIT_USER_MENU_PAGE).forward(req, resp);
     }
 }
