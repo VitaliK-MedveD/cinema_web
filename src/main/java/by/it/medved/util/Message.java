@@ -5,6 +5,9 @@ public final class Message {
     public static final String LOGIN_BUSY_MESSAGE = " -> занят! Придумайте новый логин.";
     public static final String LOGIN_NOT_REGISTERED = "Введенный логин не зерегистрирован.";
     public static final String INCORRECT_PASSWORD = "Введен неверный пароль.";
+    public static final String INVALID_AGE = "Вы не можете купить билет, ограничение %d+";
+    public static final String INVALID_DATE = "Мероприятие уже прошло!";
+    public static final String INVALID_PLACES = "Нет свободных мест.";
     public static final String REGEX_PASSWORD = "Пароль должен содержать от 6 до 20 симвлов из цифр и " +
             "латинских букв верхнего и нижнего регистра";
     public static final String REGEX_FIRST_NAME = "Имя должно содержать от 4 до 20 симвлов из руских и " +

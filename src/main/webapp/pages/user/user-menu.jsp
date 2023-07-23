@@ -13,10 +13,24 @@
 </head>
 <body>
 <form action="/user/menu" method="post" >
-    <p><u><b>Здравствуйте ${user.firstName}</b></u></p>
-    <p><button name="action" value="showListMovies" >Show list Movies</button></p>
-    <p><button name="action" value="editProfile" >Edit profile</button></p>
-    <p><button name="action" value="exit" >Exit</button></p>
+    <table>
+        <tr>
+            <td><u><b>Здравствуйте ${user.firstName}</b></u></td>
+        </tr>
+        <tr>
+            <td><p style="color: red"><b>${errorMessage}</b></p></td>
+            <td><p style="color: green"><b>${message}</b></p></td>
+        </tr>
+        <tr>
+            <td><button name="action" value="showListMovies" >Show list Movies</button></td>
+        </tr>
+        <tr>
+            <td><button name="action" value="editProfile" >Edit profile</button></td>
+        </tr>
+        <tr>
+            <td><button name="action" value="exit" >Exit</button></td>
+        </tr>
+    </table>
 </form>
 </body>
 </html>

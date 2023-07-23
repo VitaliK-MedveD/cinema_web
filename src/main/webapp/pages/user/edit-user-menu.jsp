@@ -17,10 +17,10 @@
   <table>
     <tr>
       <td>${selectedUser.login}</td>
-      <td>${selectedUser.access}</td>
+      <td>${selectedUser.role}</td>
     </tr>
   </table>
-  <p><button name="action" value="editAccess" >Edit Access</button></p>
+  <p><button name="action" value="editRole" >Edit Role</button></p>
   <p><button name="action" value="delete" >Delete</button></p>
   <p><button name="action" value="back" >Go back</button></p>
 </form>

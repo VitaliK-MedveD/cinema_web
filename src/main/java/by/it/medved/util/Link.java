@@ -18,8 +18,8 @@ public final class Link {
     public static final String USER_SING_IN_PAGE = "/pages/user/sing-In-user.jsp";
     public static final String USER_EDIT_URI = "/user/edit";
     public static final String USER_EDIT_PAGE = "/pages/user/edit-user.jsp";
-    public static final String USER_UPDATE_ACCESS_PAGE = "/pages/user/update-user-access.jsp";
-    public static final String USER_UPDATE_ACCESS_URI = "/user/update/access";
+    public static final String USER_UPDATE_ROLE_PAGE = "/pages/user/update-user-role.jsp";
+    public static final String USER_UPDATE_ROLE_URI = "/user/update/role";
     public static final String USER_DELETE_URI = "/admin/user/delete";
     public static final String USERS_PAGE = "/pages/user/read-users.jsp";
     public static final String MOVIES_URI = "/movies/read";

@@ -1,17 +1,24 @@
 package by.it.medved.repositories;
 
-import by.it.medved.entities.Access;
+import by.it.medved.entities.Role;
 import by.it.medved.entities.User;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface UserRepository {
 
-    User createUser (User user);
+    User createUser(User user);
+
     User getUserByLogin(String login);
+
     User getUserById(Long id);
+
     List<User> getAllUsers();
-    boolean updateAccess(Long id, Access access);
-    boolean updateUserFields(User user);
+
+    boolean updateRole(Long id, Role role);
+
+    User updateUserFields(Long id, String firstName, String email, String dateBirthday);
+
     boolean deleteUserById(Long id);
 }

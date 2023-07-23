@@ -1,6 +1,6 @@
 package by.it.medved.services;
 
-import by.it.medved.entities.Access;
+import by.it.medved.entities.Role;
 import by.it.medved.entities.User;
 import by.it.medved.repositories.UserRepository;
 import by.it.medved.repositories.UserRepositoryImpl;
@@ -44,18 +44,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public boolean updateAccess(Long id, Access access) {
-        return userRepository.updateAccess(id, access);
+    public boolean updateRole(Long id, Role role) {
+        return userRepository.updateRole(id, role);
     }
 
     @Override
     public User updateUserFields(Long id, String firstName, String email, String dateBirthday) {
-        User user = userRepository.getUserById(id);
-        user.setFirstName(firstName);
-        user.setEmail(email);
-        user.setDateBirthday(LocalDate.parse(dateBirthday));
-        userRepository.updateUserFields(user);
-        return user;
+        return userRepository.updateUserFields(id, firstName, email, dateBirthday);
     }
 
     @Override
@@ -83,20 +78,14 @@ public class UserServiceImpl implements UserService {
     public boolean checkDate(String line, String regex) {
         Pattern pattern = Pattern.compile(regex);
         Matcher matcher = pattern.matcher(line);
-        if (matcher.matches() && LocalDate.parse(line).isBefore(LocalDate.now())) {
-            return true;
-        } else {
-            return false;
-        }
+        return (matcher.matches() && LocalDate.parse(line).isBefore(LocalDate.now()));
     }
 
     @Override
     public boolean checkUniqueLogin(String login) {
         List<User> users = getAllUsers();
-        if (users.stream()
-                .noneMatch(user -> user.getLogin().equalsIgnoreCase(login))) {
-            return true;
-        } else return false;
+        return (users.stream()
+                .noneMatch(user -> user.getLogin().equalsIgnoreCase(login)));
     }
 
     private UserServiceImpl() {

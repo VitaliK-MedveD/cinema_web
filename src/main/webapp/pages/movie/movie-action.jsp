@@ -39,15 +39,14 @@
         <tbody>
         <tr>
             <td><button name="action" value="buyTicket" >Buy Ticket</button></td>
-            <td><p style="color: green"><b>${message}</b></p></td>
         </tr>
         <c:choose>
-            <c:when test="${user.access == 'MANAGER'}">
+            <c:when test="${user.role == 'MANAGER'}">
                 <tr>
                     <td><button name="action" value="editMovie" >Edit Movie</button></td>
                 </tr>
             </c:when>
-            <c:when test="${user.access == 'ADMIN'}">
+            <c:when test="${user.role == 'ADMIN'}">
                 <tr>
                     <td><button name="action" value="editMovie" >Edit Movie</button></td>
                 </tr>

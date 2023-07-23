@@ -18,7 +18,7 @@
     <tr>
         <th></th>
         <th>Id</th>
-        <th>Access</th>
+        <th>Role</th>
         <th>Login</th>
         <th>First Name</th>
         <th>Email</th>
@@ -31,7 +31,7 @@
         <tr>
             <td><input type="radio" name="userId" value="${user.id}"/></td>
             <td>${user.id}</td>
-            <td>${user.access}</td>
+            <td>${user.role}</td>
             <td>${user.login}</td>
             <td>${user.firstName}</td>
             <td>${user.email}</td>

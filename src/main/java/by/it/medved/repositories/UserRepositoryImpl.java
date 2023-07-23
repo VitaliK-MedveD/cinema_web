@@ -1,36 +1,29 @@
 package by.it.medved.repositories;
 
-import by.it.medved.entities.Access;
+import by.it.medved.entities.Role;
 import by.it.medved.entities.User;
 import by.it.medved.util.ConnectionManager;
 import by.it.medved.util.DataBase;
+import by.it.medved.util.JpaUtil;
 import by.it.medved.util.SqlRequest;
 
+import javax.persistence.EntityManager;
 import java.sql.*;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-
 
 public class UserRepositoryImpl implements UserRepository {
 
     @Override
     public User createUser(User user) {
-        try (Connection connection = ConnectionManager.open()) {
-            PreparedStatement statement =
-                    connection.prepareStatement(SqlRequest.USER_CREATE);
-            statement.setString(1, user.getAccess().name());
-            statement.setString(2, user.getLogin());
-            statement.setBytes(3, user.getPassword());
-            statement.setString(4, user.getFirstName());
-            statement.setString(5, user.getEmail());
-            statement.setDate(6, Date.valueOf(user.getDateBirthday()));
-            statement.setDate(7, Date.valueOf(user.getDateCreated()));
-            statement.setBytes(8, user.getSalt());
-            statement.execute();
-        } catch (SQLException e) {
-            throw new RuntimeException();
-        }
-        return getUserByLogin(user.getLogin());
+        EntityManager entityManager = JpaUtil.getEntityManager();
+        entityManager.getTransaction().begin();
+        entityManager.persist(user);
+        entityManager.getTransaction().commit();
+        entityManager.close();
+        JpaUtil.deleteEntityManager();
+        return user;
     }
 
     @Override
@@ -41,7 +34,7 @@ public class UserRepositoryImpl implements UserRepository {
             statement.setString(1, login);
             ResultSet resultSet = statement.executeQuery();
             if (resultSet.next()) {
-                user = buildUserFromDatabase(resultSet);
+                user = buildUser(resultSet);
             }
             return user;
         } catch (SQLException e) {
@@ -51,18 +44,13 @@ public class UserRepositoryImpl implements UserRepository {
 
     @Override
     public User getUserById(Long id) {
-        try (Connection connection = ConnectionManager.open()) {
-            User user = new User();
-            PreparedStatement statement = connection.prepareStatement(SqlRequest.GET_USER_BY_ID);
-            statement.setLong(1, id);
-            ResultSet resultSet = statement.executeQuery();
-            if (resultSet.next()) {
-                user = buildUserFromDatabase(resultSet);
-            }
-            return user;
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
+        EntityManager entityManager = JpaUtil.getEntityManager();
+        entityManager.getTransaction().begin();
+        User user = entityManager.find(User.class, id);
+        entityManager.getTransaction().commit();
+        entityManager.close();
+        JpaUtil.deleteEntityManager();
+        return user;
     }
 
     @Override
@@ -72,7 +60,7 @@ public class UserRepositoryImpl implements UserRepository {
             PreparedStatement statement = connection.prepareStatement(SqlRequest.GET_ALL_USERS);
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
-                User user = buildUserFromDatabase(resultSet);
+                User user = buildUser(resultSet);
                 users.add(user);
             }
             return users;
@@ -82,10 +70,10 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    public boolean updateAccess(Long id, Access access) {
+    public boolean updateRole(Long id, Role role) {
         try (Connection connection = ConnectionManager.open()) {
             PreparedStatement statement = connection.prepareStatement(SqlRequest.UPDATE_ACCESS);
-            statement.setString(1, access.name());
+            statement.setString(1, role.name());
             statement.setLong(2, id);
             statement.execute();
             return true;
@@ -95,18 +83,29 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    public boolean updateUserFields(User user) {
-        try (Connection connection = ConnectionManager.open()) {
-            PreparedStatement statement = connection.prepareStatement(SqlRequest.UPDATE_USER_FIELDS);
-            statement.setString(1, user.getFirstName());
-            statement.setString(2, user.getEmail());
-            statement.setDate(3, Date.valueOf(user.getDateBirthday()));
-            statement.setLong(4, user.getId());
-            statement.execute();
-            return true;
-        } catch (SQLException e) {
-            throw new RuntimeException();
-        }
+    public User updateUserFields(Long id, String firstName, String email, String dateBirthday) {
+        EntityManager entityManager = JpaUtil.getEntityManager();
+        entityManager.getTransaction().begin();
+        User user = entityManager.find(User.class, id);
+        user.setFirstName(firstName);
+        user.setEmail(email);
+        user.setDateBirthday(LocalDate.parse(dateBirthday));
+        entityManager.getTransaction().commit();
+        entityManager.close();
+        JpaUtil.deleteEntityManager();
+        return user;
+
+//        try (Connection connection = ConnectionManager.open()) {
+//            PreparedStatement statement = connection.prepareStatement(SqlRequest.UPDATE_USER_FIELDS);
+//            statement.setString(1, user.getFirstName());
+//            statement.setString(2, user.getEmail());
+//            statement.setDate(3, Date.valueOf(user.getDateBirthday()));
+//            statement.setLong(4, user.getId());
+//            statement.execute();
+//            return true;
+//        } catch (SQLException e) {
+//            throw new RuntimeException();
+//        }
     }
 
     @Override
@@ -121,10 +120,10 @@ public class UserRepositoryImpl implements UserRepository {
         }
     }
 
-    private User buildUserFromDatabase(ResultSet resultSet) throws SQLException {
+    private User buildUser(ResultSet resultSet) throws SQLException {
         User user = User.builder()
                 .id(resultSet.getLong(DataBase.ID))
-                .access(Access.valueOf(resultSet.getString(DataBase.ACCESS)))
+                .role(Role.valueOf(resultSet.getString(DataBase.ROLE)))
                 .login(resultSet.getString(DataBase.LOGIN))
                 .password(resultSet.getBytes(DataBase.PASSWORD))
                 .firstName(resultSet.getString(DataBase.FIRST_NAME))

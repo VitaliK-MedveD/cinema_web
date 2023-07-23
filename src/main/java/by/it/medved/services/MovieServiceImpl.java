@@ -10,7 +10,7 @@ import java.util.List;
 
 import static by.it.medved.services.TicketServiceImpl.getTicketService;
 
-public class MovieServiceImpl implements MovieService{
+public class MovieServiceImpl implements MovieService {
 
     private final MovieRepository movieRepository = new MovieRepositoryImpl();
     private final TicketService ticketService = getTicketService();
@@ -18,7 +18,7 @@ public class MovieServiceImpl implements MovieService{
 
     public static MovieService getMovieService() {
         if (movieService == null) {
-            synchronized (UserService.class) {
+            synchronized (MovieService.class) {
                 if (movieService == null) {
                     movieService = new MovieServiceImpl();
                 }
@@ -28,9 +28,9 @@ public class MovieServiceImpl implements MovieService{
     }
 
     @Override
-    public Movie createMovie(Movie movie) {
-        Movie thisMovie = movieRepository.createMovie(movie);
-        ticketService.createTenTickets(thisMovie);
+    public Movie addMovie(Movie movie) {
+        Movie thisMovie = movieRepository.addMovie(movie);
+        ticketService.addTenTickets(thisMovie);
         thisMovie.setTickets(ticketService.getAllTickets(thisMovie.getId(), DataBase.MOVIE_ID));
         thisMovie.setFreeTickets(thisMovie.getCountFreeTickets());
         return thisMovie;
@@ -76,10 +76,6 @@ public class MovieServiceImpl implements MovieService{
 
     @Override
     public Movie deleteMovie(Movie movie) {
-        List<Ticket> tickets = movie.getTickets();
-        for (Ticket ticket : tickets) {
-            ticketService.deleteTicket(ticket);
-        }
         return movieRepository.deleteMovieById(movie.getId());
     }
 

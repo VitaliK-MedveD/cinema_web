@@ -13,12 +13,30 @@
 </head>
 <body>
 <form action="/admin/menu" method="post" >
-  <p><u><b>Здравствуйте ${user.firstName}</b></u></p>
-  <p><button name="action" value="showListUsers" >Show list users</button></p>
-  <p><button name="action" value="editProfile" >Edit profile</button></p>
-  <p><button name="action" value="showListMovies" >Show list Movies</button></p>
-  <p><button name="action" value="addMovie" >Add Movie</button></p>
-  <p><button name="action" value="exit" >Exit</button></p>
+  <table>
+    <tr>
+      <td><u><b>Hello ${user.firstName}</b></u></td>
+    </tr>
+    <tr>
+      <td><p style="color: red"><b>${errorMessage}</b></p></td>
+      <td><p style="color: green"><b>${message}</b></p></td>
+    </tr>
+    <tr>
+      <td><button name="action" value="showListUsers" >Show list users</button></td>
+    </tr>
+    <tr>
+      <td><button name="action" value="editProfile" >Edit profile</button></td>
+    </tr>
+    <tr>
+      <td><button name="action" value="showListMovies" >Show list Movies</button></td>
+    </tr>
+    <tr>
+      <td><button name="action" value="addMovie" >Add Movie</button></td>
+    </tr>
+    <tr>
+      <td><button name="action" value="exit" >Exit</button></td>
+    </tr>
+  </table>
 </form>
 </body>
 </html>

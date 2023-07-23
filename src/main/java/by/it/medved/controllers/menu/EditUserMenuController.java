@@ -16,8 +16,8 @@ public class EditUserMenuController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         switch (req.getParameter("action")) {
-            case EDIT_ACCESS:
-                req.getRequestDispatcher(USER_UPDATE_ACCESS_PAGE).forward(req, resp);
+            case EDIT_ROLE:
+                req.getRequestDispatcher(USER_UPDATE_ROLE_PAGE).forward(req, resp);
                 break;
             case DELETE:
                 req.getRequestDispatcher(USER_DELETE_URI).forward(req, resp);

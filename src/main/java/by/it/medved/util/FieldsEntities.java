@@ -8,7 +8,7 @@ public final class FieldsEntities {
     public static final String SELECTED_MOVIE = "selectedMovie";
     public static final String SHOW_LIST_USERS = "showListUsers";
     public static final String EDIT_PROFILE = "editProfile";
-    public static final String EDIT_ACCESS = "editAccess";
+    public static final String EDIT_ROLE = "editRole";
     public static final String EDIT_MOVIE = "editMovie";
     public static final String DELETE_MOVIE = "deleteMovie";
     public static final String SHOW_LIST_MOVIES = "showListMovies";
@@ -27,12 +27,13 @@ public final class FieldsEntities {
     public static final String LOGIN = "login";
     public static final String ENTERED_LOGIN = "enteredLogin";
     public static final String PASSWORD = "password";
-    public static final String ACCESS = "access";
+    public static final String ROLE = "role";
     public static final String FIRST_NAME = "firstName";
     public static final String EMAIL = "email";
     public static final String DATE_BIRTHDAY = "dateBirthday";
     public static final String MOVIE_ID = "movieId";
     public static final String MOVIE_TITLE = "movieTitle";
+    public static final String SHOW_DATE_TIME = "showDateTime";
     public static final String SHOW_DATE = "showDate";
     public static final String SHOW_TIME = "showTime";
     public static final String PRICE = "price";
@@ -40,4 +41,7 @@ public final class FieldsEntities {
     public static final String DELETE = "delete";
     public static final String BACK = "back";
     public static final String EXIT = "exit";
+
+    private FieldsEntities() {
+    }
 }

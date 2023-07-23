@@ -9,26 +9,26 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html>
 <head>
-    <title>Update Access</title>
+    <title>Update Role</title>
 </head>
 <body>
 <table>
-    <form action="/user/update/access" method="post">
+    <form action="/user/update/role" method="post">
         <thead>
         <tr>
             <th>Login</th>
-            <th>Access</th>
+            <th>Role</th>
         </tr>
         </thead>
         <tbody>
         <tr>
             <td>${selectedUser.login}</td>
-            <td>${selectedUser.access}</td>
-            <td><select name="access">
+            <td>${selectedUser.role}</td>
+            <td><select name="role">
                 <option selected="selected" value="USER">User</option>
                 <option value="MANAGER">Manager</option>
                 <option value="ADMIN">Admin</option></select></td>
-            <td><input type="submit" value="Update Access"></td>
+            <td><input type="submit" value="Update Role"></td>
         </tr>
     </form>
     </tbody>

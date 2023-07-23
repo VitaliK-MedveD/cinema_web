@@ -14,6 +14,7 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.Optional;
 
+import static by.it.medved.services.EncryptionServiceImpl.*;
 import static by.it.medved.services.UserServiceImpl.getUserService;
 import static by.it.medved.util.Link.*;
 import static by.it.medved.util.Message.*;
@@ -23,7 +24,7 @@ import static by.it.medved.util.FieldsEntities.*;
 public class SingInUserController extends HttpServlet {
 
     private final UserService userService = getUserService();
-    private final EncryptionService encryptionService = new EncryptionServiceImpl();
+    private final EncryptionService encryptionService = getEncryptionService();
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {

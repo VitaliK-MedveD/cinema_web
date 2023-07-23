@@ -5,22 +5,45 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.persistence.*;
 import java.time.LocalDate;
 
+@Entity
+@Table(name = "PERSON")
 @Data
 @Builder
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 public class User {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "ID")
     private Long id;
-    private Access access;
-    private String login;
-    private byte[] password;
-    private String firstName;
-    private String email;
-    private LocalDate dateBirthday;
-    private LocalDate dateCreated;
-    private byte[] salt;
 
+    @Column(name = "ROLE")
+    private Role role;
+
+    @Column(unique = true, name = "LOGIN")
+    private String login;
+
+    @Column(name = "PASSWORD")
+    private byte[] password;
+
+    @Column(name = "FIRST_NAME")
+    private String firstName;
+
+    @Column(name = "EMAIL")
+    private String email;
+
+    @Column(name = "DATE_BIRTHDAY")
+    private LocalDate dateBirthday;
+
+    @Column(name = "DATE_CREATED")
+    private LocalDate dateCreated;
+
+    @Column(name = "SALT")
+    private byte[] salt;
 }
+
+

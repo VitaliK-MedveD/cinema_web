@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static by.it.medved.services.MovieServiceImpl.getMovieService;
 import static by.it.medved.util.Link.*;
@@ -24,7 +25,9 @@ public class ReadMoviesController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         HttpSession session = req.getSession();
-        List<Movie> movies = movieService.getAllMovies();
+        List<Movie> movies = movieService.getAllMovies().stream()
+                .filter(movie -> movie.getFreeTickets() != 0)
+                .collect(Collectors.toList());
         session.setAttribute(MOVIES, movies);
         req.getRequestDispatcher(MOVIES_PAGE).forward(req, resp);
     }

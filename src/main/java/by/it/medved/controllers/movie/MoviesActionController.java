@@ -11,7 +11,7 @@ import static by.it.medved.util.Link.*;
 import static by.it.medved.util.FieldsEntities.*;
 
 @WebServlet(urlPatterns = "/movie/action")
-public class MoviesListActionController extends HttpServlet {
+public class MoviesActionController extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {

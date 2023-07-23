@@ -6,10 +6,15 @@ import java.util.List;
 
 public interface MovieService {
 
-    Movie createMovie(Movie movie);
+    Movie addMovie(Movie movie);
+
     Movie getMovieById(Long id);
+
     Movie getMovieByTitle(String title);
+
     List<Movie> getAllMovies();
+
     Movie updateMovie(Movie movie);
+
     Movie deleteMovie(Movie movie);
 }

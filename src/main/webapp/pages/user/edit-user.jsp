@@ -39,13 +39,13 @@
     </form>
         <tr>
         <c:choose>
-            <c:when test="${user.access == 'ADMIN'}">
+            <c:when test="${user.role == 'ADMIN'}">
                 <td><button onclick="location.href='/admin/menu'">Go back</button></td>
             </c:when>
-            <c:when test="${user.access == 'MANAGER'}">
+            <c:when test="${user.role == 'MANAGER'}">
                 <td><button onclick="location.href='/manager/menu'">Go back</button></td>
             </c:when>
-            <c:when test="${user.access == 'USER'}">
+            <c:when test="${user.role == 'USER'}">
                 <td><button onclick="location.href='/user/menu'">Go back</button></td>
             </c:when>
         </c:choose>

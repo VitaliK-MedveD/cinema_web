@@ -1,6 +1,6 @@
 package by.it.medved.controllers.user;
 
-import by.it.medved.entities.Access;
+import by.it.medved.entities.Role;
 import by.it.medved.entities.User;
 import by.it.medved.services.UserService;
 
@@ -16,8 +16,8 @@ import static by.it.medved.services.UserServiceImpl.getUserService;
 import static by.it.medved.util.Link.*;
 import static by.it.medved.util.FieldsEntities.*;
 
-@WebServlet(urlPatterns = "/user/update/access")
-public class UpdateAccessController extends HttpServlet {
+@WebServlet(urlPatterns = "/user/update/role")
+public class UpdateRoleController extends HttpServlet {
 
     private final UserService userService = getUserService();
 
@@ -25,10 +25,10 @@ public class UpdateAccessController extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         HttpSession session = req.getSession();
         User user = (User) session.getAttribute(USER);
-        if (user.getAccess().equals(Access.ADMIN)) {
+        if (user.getRole().equals(Role.ADMIN)) {
             User selectedUser = (User) session.getAttribute(SELECTED_USER);
-            String access = req.getParameter(ACCESS);
-            userService.updateAccess(selectedUser.getId(), Access.valueOf(access));
+            String role = req.getParameter(ROLE);
+            userService.updateRole(selectedUser.getId(), Role.valueOf(role));
             doGet(req, resp);
         } else {
             req.getRequestDispatcher(FORBIDDEN_403_PAGE).forward(req, resp);

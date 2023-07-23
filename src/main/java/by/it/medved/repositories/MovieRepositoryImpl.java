@@ -9,13 +9,13 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MovieRepositoryImpl implements MovieRepository{
+public class MovieRepositoryImpl implements MovieRepository {
 
     @Override
-    public Movie createMovie(Movie movie) {
+    public Movie addMovie(Movie movie) {
         try (Connection connection = ConnectionManager.open()) {
             PreparedStatement statement =
-                    connection.prepareStatement(SqlRequest.CREATE_MOVIE);
+                    connection.prepareStatement(SqlRequest.ADD_MOVIE);
             statement.setString(1, movie.getMovieTitle());
             statement.setDate(2, Date.valueOf(movie.getShowDate()));
             statement.setTime(3, Time.valueOf(movie.getShowTime()));
@@ -36,7 +36,7 @@ public class MovieRepositoryImpl implements MovieRepository{
             statement.setLong(1, id);
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
-                movie = buildMovieFromDatabase(resultSet);
+                movie = buildMovie(resultSet);
             }
             return movie;
         } catch (SQLException e) {
@@ -52,7 +52,7 @@ public class MovieRepositoryImpl implements MovieRepository{
             statement.setString(1, title);
             ResultSet resultSet = statement.executeQuery();
             if (resultSet.next()) {
-                movie = buildMovieFromDatabase(resultSet);
+                movie = buildMovie(resultSet);
             }
             return movie;
         } catch (SQLException e) {
@@ -67,7 +67,7 @@ public class MovieRepositoryImpl implements MovieRepository{
             PreparedStatement statement = connection.prepareStatement(SqlRequest.GET_ALL_MOVIES);
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
-                Movie movie = buildMovieFromDatabase(resultSet);
+                Movie movie = buildMovie(resultSet);
                 movies.add(movie);
             }
             return movies;
@@ -105,7 +105,7 @@ public class MovieRepositoryImpl implements MovieRepository{
         }
     }
 
-    private Movie buildMovieFromDatabase(ResultSet resultSet) throws SQLException {
+    private Movie buildMovie(ResultSet resultSet) throws SQLException {
         Movie movie = Movie.builder()
                 .id(resultSet.getLong(DataBase.ID))
                 .movieTitle(resultSet.getString(DataBase.MOVIE_TITLE))

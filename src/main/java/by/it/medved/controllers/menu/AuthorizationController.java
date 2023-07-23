@@ -1,6 +1,7 @@
 package by.it.medved.controllers.menu;
 
 import by.it.medved.entities.User;
+
 import static by.it.medved.util.Link.*;
 
 import javax.servlet.ServletException;
@@ -16,14 +17,14 @@ public class AuthorizationController extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-       doGet(req, resp);
+        doGet(req, resp);
     }
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         HttpSession session = req.getSession();
         User user = (User) session.getAttribute("user");
-        switch (user.getAccess()) {
+        switch (user.getRole()) {
             case USER:
                 req.getRequestDispatcher(USER_MENU_PAGE).forward(req, resp);
                 break;
@@ -31,6 +32,7 @@ public class AuthorizationController extends HttpServlet {
                 req.getRequestDispatcher(MANAGER_MENU_PAGE).forward(req, resp);
                 break;
             case ADMIN:
+            case SUPER_ADMIN:
                 req.getRequestDispatcher(ADMIN_MENU_PAGE).forward(req, resp);
                 break;
         }

@@ -17,7 +17,7 @@ import static by.it.medved.util.Link.*;
 import static by.it.medved.util.FieldsEntities.*;
 
 @WebServlet(urlPatterns = "/movie/create")
-public class CreateMovieController extends HttpServlet {
+public class AddMovieController extends HttpServlet {
 
     private final MovieService movieService = getMovieService();
     private final Mapper movieMapper = getMapper();
@@ -30,8 +30,8 @@ public class CreateMovieController extends HttpServlet {
                 req.getParameter(SHOW_TIME),
                 req.getParameter(PRICE),
                 req.getParameter(AGE_LIMIT));
-        movieService.createMovie(movie);
-        doPost(req, resp);
+        movieService.addMovie(movie);
+        doGet(req, resp);
     }
 
     @Override

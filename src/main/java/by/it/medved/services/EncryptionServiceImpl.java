@@ -1,6 +1,6 @@
 package by.it.medved.services;
 
-import by.it.medved.util.Algorithm;
+import by.it.medved.util.EncryptAlgorithmConstants;
 
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
@@ -10,13 +10,26 @@ import java.security.spec.InvalidKeySpecException;
 import java.security.spec.KeySpec;
 import java.util.Arrays;
 
-public class EncryptionServiceImpl implements EncryptionService{
+public class EncryptionServiceImpl implements EncryptionService {
+
+    private static volatile EncryptionService encryptionService;
+
+    public static EncryptionService getEncryptionService() {
+        if (encryptionService == null) {
+            synchronized (EncryptionService.class) {
+                if (encryptionService == null) {
+                    encryptionService = new EncryptionServiceImpl();
+                }
+            }
+        }
+        return encryptionService;
+    }
 
     @Override
     public byte[] generateSalt() {
         SecureRandom random = new SecureRandom();
         try {
-            random = SecureRandom.getInstance(Algorithm.SHA1);
+            random = SecureRandom.getInstance(EncryptAlgorithmConstants.SHA1);
         } catch (NoSuchAlgorithmException e) {
             throw new RuntimeException(e);
         }
@@ -32,7 +45,7 @@ public class EncryptionServiceImpl implements EncryptionService{
         KeySpec spec = new PBEKeySpec(password.toCharArray(), salt, iterations, derivedKeyLength);
         SecretKeyFactory factory = null;
         try {
-            factory = SecretKeyFactory.getInstance(Algorithm.PBKDF2);
+            factory = SecretKeyFactory.getInstance(EncryptAlgorithmConstants.PBKDF2);
             return factory.generateSecret(spec).getEncoded();
         } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
             throw new RuntimeException(e);
@@ -43,5 +56,8 @@ public class EncryptionServiceImpl implements EncryptionService{
     public boolean authenticate(String enteredPassword, byte[] encryptedPassword, byte[] salt) {
         byte[] encryptedAttemptedPassword = getEncryptedPassword(enteredPassword, salt);
         return Arrays.equals(encryptedPassword, encryptedAttemptedPassword);
+    }
+
+    private EncryptionServiceImpl() {
     }
 }

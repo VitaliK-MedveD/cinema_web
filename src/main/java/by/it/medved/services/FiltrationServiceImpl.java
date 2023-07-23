@@ -6,29 +6,35 @@ import by.it.medved.util.Regex;
 
 import static by.it.medved.services.UserServiceImpl.getUserService;
 
-public class FiltrationServiceImpl implements FiltrationService{
+public class FiltrationServiceImpl implements FiltrationService {
 
     private final UserService userService = getUserService();
     private UserFieldsValidationDto userFieldsValidationDto;
+    private static volatile FiltrationService filtrationService;
+
+    public static FiltrationService getFiltrationService() {
+        if (filtrationService == null) {
+            synchronized (FiltrationService.class) {
+                if (filtrationService == null) {
+                    filtrationService = new FiltrationServiceImpl();
+                }
+            }
+        }
+        return filtrationService;
+    }
 
     @Override
     public boolean checkUserFields(String login, String password, String firstName, String email, String dateBirthday) {
         userFieldsValidationDto = new UserFieldsValidationDto();
-        if(checkUniqueLogin(login) & checkPassword(password) & checkFirstName(firstName) & checkEmail(email) &
-                checkDateBirthday(dateBirthday)) {
-            return true;
-        }
-        return false;
+        return (checkUniqueLogin(login) & checkPassword(password) & checkFirstName(firstName) & checkEmail(email) &
+                checkDateBirthday(dateBirthday));
     }
 
     @Override
     public boolean checkUserFields(String firstName, String email, String dateBirthday) {
         userFieldsValidationDto = new UserFieldsValidationDto();
-        if(checkFirstName(firstName) & checkEmail(email) &
-                checkDateBirthday(dateBirthday)) {
-            return true;
-        }
-        return false;
+        return (checkFirstName(firstName) & checkEmail(email) &
+                checkDateBirthday(dateBirthday));
     }
 
     @Override
@@ -36,7 +42,7 @@ public class FiltrationServiceImpl implements FiltrationService{
         return userFieldsValidationDto;
     }
 
-    private boolean checkUniqueLogin (String login) {
+    private boolean checkUniqueLogin(String login) {
         if (userService.checkUniqueLogin(login)) {
             userFieldsValidationDto.setLogin(login);
             return true;
@@ -84,5 +90,8 @@ public class FiltrationServiceImpl implements FiltrationService{
             userFieldsValidationDto.setNotValidDateBirthday(Message.REGEX_DATE);
             return false;
         }
+    }
+
+    private FiltrationServiceImpl() {
     }
 }

@@ -1,12 +1,9 @@
 package by.it.medved.util;
 
-import lombok.extern.slf4j.Slf4j;
-
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
-@Slf4j
 public final class ConnectionManager {
 
     private static final String URL_KEY = "db.url";
@@ -24,16 +21,14 @@ public final class ConnectionManager {
                     PropertiesUtil.get(USERNAME_KEY),
                     PropertiesUtil.get(PASSWORD_KEY));
         } catch (SQLException e) {
-            log.error(e.getMessage());
             throw new RuntimeException(e);
         }
     }
 
     private static void loadDriver() {
         try {
-            Class.forName("com.mysql.jdbc.Driver");
+            Class.forName("org.postgresql.Driver");
         } catch (ClassNotFoundException e) {
-            log.error(e.getMessage());
             throw new RuntimeException("Error loading driver");
         }
     }

@@ -9,7 +9,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TicketRepositoryImpl implements TicketRepository{
+public class TicketRepositoryImpl implements TicketRepository {
 
     @Override
     public boolean createTicket(Ticket ticket) {
@@ -33,11 +33,12 @@ public class TicketRepositoryImpl implements TicketRepository{
     public List<Ticket> getAllTickets(Long id, String columnName) {
         List<Ticket> tickets = new ArrayList<>();
         try (Connection connection = ConnectionManager.open()) {
-            PreparedStatement statement = connection.prepareStatement(SqlRequest.GET_ALL_TICKETS.replace("%s", columnName));
+            PreparedStatement statement = connection.prepareStatement(SqlRequest.GET_ALL_TICKETS
+                    .replace("%s", columnName));
             statement.setLong(1, id);
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
-                Ticket ticket = buildTicketFromDatabase(resultSet);
+                Ticket ticket = buildTicket(resultSet);
                 tickets.add(ticket);
             }
             return tickets;
@@ -90,7 +91,7 @@ public class TicketRepositoryImpl implements TicketRepository{
         }
     }
 
-    private Ticket buildTicketFromDatabase(ResultSet resultSet) throws SQLException {
+    private Ticket buildTicket(ResultSet resultSet) throws SQLException {
         Ticket ticket = Ticket.builder()
                 .id(resultSet.getLong(DataBase.ID))
                 .movieId(resultSet.getLong(DataBase.MOVIE_ID))

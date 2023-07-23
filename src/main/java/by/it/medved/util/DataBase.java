@@ -5,7 +5,7 @@ public final class DataBase {
     public static final String ID = "id";
     public static final String MOVIE_ID = "movie_id";
     public static final String USER_ID = "user_id";
-    public static final String ACCESS = "access";
+    public static final String ROLE = "role";
     public static final String LOGIN = "login";
     public static final String PASSWORD = "password";
     public static final String FIRST_NAME = "first_name";
@@ -13,6 +13,7 @@ public final class DataBase {
     public static final String DATE_BIRTHDAY = "date_birthday";
     public static final String DATE_CREATED = "date_created";
     public static final String MOVIE_TITLE = "movie_title";
+    public static final String SHOW_DATE_TIME = "show_date_time";
     public static final String SHOW_DATE = "show_date";
     public static final String SHOW_TIME = "show_time";
     public static final String NUMBER_PLACE = "number_of_place";
