@@ -10,8 +10,6 @@ public interface UserRepository {
 
     User createUser(User user);
 
-    User getUserByLogin(String login);
-
     User getUserById(Long id);
 
     List<User> getAllUsers();

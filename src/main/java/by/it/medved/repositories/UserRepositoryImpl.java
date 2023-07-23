@@ -10,8 +10,9 @@ import by.it.medved.util.SqlRequest;
 import javax.persistence.EntityManager;
 import java.sql.*;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
+
+import static by.it.medved.util.JpqlQuery.*;
 
 public class UserRepositoryImpl implements UserRepository {
 
@@ -27,22 +28,6 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    public User getUserByLogin(String login) {
-        try (Connection connection = ConnectionManager.open()) {
-            User user = new User();
-            PreparedStatement statement = connection.prepareStatement(SqlRequest.GET_USER_BY_LOGIN);
-            statement.setString(1, login);
-            ResultSet resultSet = statement.executeQuery();
-            if (resultSet.next()) {
-                user = buildUser(resultSet);
-            }
-            return user;
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    @Override
     public User getUserById(Long id) {
         EntityManager entityManager = JpaUtil.getEntityManager();
         entityManager.getTransaction().begin();
@@ -55,31 +40,25 @@ public class UserRepositoryImpl implements UserRepository {
 
     @Override
     public List<User> getAllUsers() {
-        List<User> users = new ArrayList<>();
-        try (Connection connection = ConnectionManager.open()) {
-            PreparedStatement statement = connection.prepareStatement(SqlRequest.GET_ALL_USERS);
-            ResultSet resultSet = statement.executeQuery();
-            while (resultSet.next()) {
-                User user = buildUser(resultSet);
-                users.add(user);
-            }
-            return users;
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
+        EntityManager entityManager = JpaUtil.getEntityManager();
+        entityManager.getTransaction().begin();
+        List<User> users = entityManager.createQuery(READ_ALL_USERS, User.class)
+                .getResultList();
+        entityManager.close();
+        JpaUtil.deleteEntityManager();
+        return users;
     }
 
     @Override
     public boolean updateRole(Long id, Role role) {
-        try (Connection connection = ConnectionManager.open()) {
-            PreparedStatement statement = connection.prepareStatement(SqlRequest.UPDATE_ACCESS);
-            statement.setString(1, role.name());
-            statement.setLong(2, id);
-            statement.execute();
-            return true;
-        } catch (SQLException e) {
-            throw new RuntimeException();
-        }
+        EntityManager entityManager = JpaUtil.getEntityManager();
+        entityManager.getTransaction().begin();
+        User user = entityManager.find(User.class, id);
+        user.setRole(role);
+        entityManager.getTransaction().commit();
+        entityManager.close();
+        JpaUtil.deleteEntityManager();
+        return true;
     }
 
     @Override
