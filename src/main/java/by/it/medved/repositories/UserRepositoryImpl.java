@@ -94,18 +94,6 @@ public class UserRepositoryImpl implements UserRepository {
         entityManager.close();
         JpaUtil.deleteEntityManager();
         return user;
-
-//        try (Connection connection = ConnectionManager.open()) {
-//            PreparedStatement statement = connection.prepareStatement(SqlRequest.UPDATE_USER_FIELDS);
-//            statement.setString(1, user.getFirstName());
-//            statement.setString(2, user.getEmail());
-//            statement.setDate(3, Date.valueOf(user.getDateBirthday()));
-//            statement.setLong(4, user.getId());
-//            statement.execute();
-//            return true;
-//        } catch (SQLException e) {
-//            throw new RuntimeException();
-//        }
     }
 
     @Override
