@@ -1,19 +1,20 @@
 package by.it.medved.services;
 
 import by.it.medved.entities.Movie;
-import by.it.medved.entities.Ticket;
 import by.it.medved.repositories.MovieRepository;
 import by.it.medved.repositories.MovieRepositoryImpl;
-import by.it.medved.util.DataBase;
 
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static by.it.medved.services.TicketServiceImpl.getTicketService;
 
 public class MovieServiceImpl implements MovieService {
 
-    private final MovieRepository movieRepository = new MovieRepositoryImpl();
     private final TicketService ticketService = getTicketService();
+    private final MovieRepository movieRepository = new MovieRepositoryImpl();
+
     private static volatile MovieService movieService;
 
     public static MovieService getMovieService() {
@@ -29,54 +30,31 @@ public class MovieServiceImpl implements MovieService {
 
     @Override
     public Movie addMovie(Movie movie) {
-        Movie thisMovie = movieRepository.addMovie(movie);
-        ticketService.addTenTickets(thisMovie);
-        thisMovie.setTickets(ticketService.getAllTickets(thisMovie.getId(), DataBase.MOVIE_ID));
-        thisMovie.setFreeTickets(thisMovie.getCountFreeTickets());
-        return thisMovie;
+        movie.setTickets(ticketService.addTenTickets(movie));
+        movie.setCountFreeTickets(movie.getCount());
+        return movieRepository.addMovie(movie);
     }
 
     @Override
     public Movie getMovieById(Long id) {
-        Movie movie = movieRepository.getMovieById(id);
-        movie.setTickets(ticketService.getAllTickets(movie.getId(), DataBase.MOVIE_ID));
-        movie.setFreeTickets(movie.getCountFreeTickets());
-        return movie;
-    }
-
-    @Override
-    public Movie getMovieByTitle(String title) {
-        Movie movie = movieRepository.getMovieByTitle(title);
-        movie.setTickets(ticketService.getAllTickets(movie.getId(), DataBase.MOVIE_ID));
-        movie.setFreeTickets(movie.getCountFreeTickets());
-        return movie;
+        return movieRepository.getMovieById(id);
     }
 
     @Override
     public List<Movie> getAllMovies() {
-        List<Movie> movies = movieRepository.getAllMovies();
-        for (Movie movie : movies) {
-            movie.setTickets(ticketService.getAllTickets(movie.getId(), DataBase.MOVIE_ID));
-            movie.setFreeTickets(movie.getCountFreeTickets());
-        }
-        return movies;
+        return movieRepository.getAllMovies();
     }
 
     @Override
-    public Movie updateMovie(Movie movie) {
-        List<Ticket> tickets = movie.getTickets();
-        for (Ticket ticket : tickets) {
-            ticket.setShowDate(movie.getShowDate());
-            ticket.setShowTime(movie.getShowTime());
-            ticket.setPrice(movie.getPrice());
-            ticketService.updateTicket(ticket);
-        }
-        return movieRepository.updateMovie(movie);
+    public Movie updateMovie(Long id, String showDateTime, String price) {
+        LocalDateTime DateTime = LocalDateTime.parse(showDateTime);
+        BigDecimal bigDecimalPrice = BigDecimal.valueOf(Double.parseDouble(price));
+        return movieRepository.updateMovie(id, DateTime, bigDecimalPrice);
     }
 
     @Override
-    public Movie deleteMovie(Movie movie) {
-        return movieRepository.deleteMovieById(movie.getId());
+    public Movie deleteMovie(Long id) {
+        return movieRepository.deleteMovieById(id);
     }
 
     private MovieServiceImpl() {

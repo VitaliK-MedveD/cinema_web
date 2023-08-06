@@ -20,7 +20,7 @@ public class MoviesActionController extends HttpServlet {
                 req.getRequestDispatcher(TICKET_BUY_URI).forward(req, resp);
                 break;
             case EDIT_MOVIE :
-                req.getRequestDispatcher(MOVIE_EDIT_URI).forward(req, resp);
+                req.getRequestDispatcher(MOVIE_EDIT_PAGE).forward(req, resp);
                 break;
             case DELETE_MOVIE :
                 req.getRequestDispatcher(MOVIE_DELETE_URI).forward(req, resp);

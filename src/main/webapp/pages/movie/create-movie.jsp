@@ -9,12 +9,12 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html>
 <head>
-    <title>Adding Movie</title>
+    <title>Adding movie</title>
 </head>
 <body>
 <table>
     <form action="/movie/create" method="post">
-        <tr><u><b>Adding Movie</b></u></tr>
+        <tr><u><b>Adding movie</b></u></tr>
         <tr>
             <td>Title</td>
             <td><input name="movieTitle" value="" type="text"></td>

@@ -12,13 +12,13 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
 import static by.it.medved.services.UserServiceImpl.getUserService;
-import static by.it.medved.util.Link.*;
 import static by.it.medved.util.FieldsEntities.*;
+import static by.it.medved.util.Link.USER_EDIT_PAGE;
+import static by.it.medved.util.Message.UPDATE_SUCCESSFUL;
 
 @WebServlet(urlPatterns = "/user/edit")
 public class EditUserController extends HttpServlet {
 
-    private static final String UPDATE_SUCCESSFUL = "Update successful";
     private final UserService userService = getUserService();
 
     @Override

@@ -1,6 +1,6 @@
 package by.it.medved.controllers.movie;
 
-import by.it.medved.entities.Role;
+import by.it.medved.enums.Role;
 import by.it.medved.entities.Movie;
 import by.it.medved.entities.User;
 import by.it.medved.services.MovieService;
@@ -26,7 +26,7 @@ public class DeleteMovieController extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         HttpSession session = req.getSession();
         Movie selectedMovie = (Movie) session.getAttribute(SELECTED_MOVIE);
-        movieService.deleteMovie(selectedMovie);
+        movieService.deleteMovie(selectedMovie.getId());
         req.getRequestDispatcher(ADMIN_MENU_PAGE).forward(req, resp);
     }
 
@@ -34,7 +34,7 @@ public class DeleteMovieController extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         HttpSession session = req.getSession();
         User user = (User) session.getAttribute(USER);
-        if (user.getRole().equals(Role.ADMIN)) {
+        if (user.getRole().equals(Role.ADMIN) || user.getRole().equals(Role.SUPER_ADMIN)) {
             doGet(req, resp);
         } else {
             req.getRequestDispatcher(FORBIDDEN_403_PAGE).forward(req, resp);

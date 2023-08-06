@@ -8,8 +8,8 @@ import by.it.medved.repositories.TicketRepositoryImpl;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.time.Period;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -17,7 +17,7 @@ import static by.it.medved.util.Message.*;
 
 public class TicketServiceImpl implements TicketService {
 
-    Ticket freeTicket;
+    private Ticket freeTicket;
     private String errorMessage;
     private final TicketRepository ticketRepository = new TicketRepositoryImpl();
     private static volatile TicketService ticketService;
@@ -34,26 +34,38 @@ public class TicketServiceImpl implements TicketService {
     }
 
     @Override
-    public boolean addTenTickets(Movie movie) {
+    public List<Ticket> addTenTickets(Movie movie) {
+        List<Ticket> tickets = new ArrayList<>();
         for (int i = 0; i < 10; i++) {
             Ticket ticket = Ticket.builder()
-                    .movieId(movie.getId())
+                    .movie(movie)
                     .movieTitle(movie.getMovieTitle())
-                    .showDate(movie.getShowDate())
-                    .showTime(movie.getShowTime())
+                    .showDateTime(movie.getShowDateTime())
                     .numberOfPlace(i + 1)
                     .price(movie.getPrice())
                     .build();
-            ticketRepository.createTicket(ticket);
+            tickets.add(ticket);
         }
-        return true;
+        return tickets;
+    }
+
+    @Override
+    public Ticket getTicketById(Long id) {
+        return ticketRepository.getTicketById(id);
     }
 
     @Override
     public boolean buyTicket(User user, Movie movie) {
-        if (checkDateTime(movie.getShowDate(), movie.getShowTime(), 0L) &&
+        if (checkDateTime(movie.getShowDateTime()) &&
                 checkAge(movie.getAgeLimit(), user.getDateBirthday()) && checkFreeTickets(movie)) {
-            return ticketRepository.buyOrReturnTicket(freeTicket.getId(), user.getId());
+            return ticketRepository.buyTicket(freeTicket.getId(), user);
+        } else return false;
+    }
+
+    @Override
+    public boolean returnTicket(Ticket ticket) {
+        if (checkDateTime(ticket.getShowDateTime(), 10L)) {
+            return ticketRepository.returnTicket(ticket.getId());
         } else return false;
     }
 
@@ -63,18 +75,8 @@ public class TicketServiceImpl implements TicketService {
     }
 
     @Override
-    public List<Ticket> getAllTickets(Long id, String columnName) {
-        return ticketRepository.getAllTickets(id, columnName);
-    }
-
-    @Override
-    public boolean updateTicket(Ticket ticket) {
-        return ticketRepository.updateTicket(ticket);
-    }
-
-    @Override
-    public boolean deleteTicket(Ticket ticket) {
-        return ticketRepository.deleteTicketById(ticket.getId());
+    public Ticket getTicket() {
+        return freeTicket;
     }
 
     private boolean checkAge(int ageLimit, LocalDate birthDate) {
@@ -87,19 +89,27 @@ public class TicketServiceImpl implements TicketService {
         }
     }
 
-    private boolean checkDateTime(LocalDate date, LocalTime time, long behindMinutes) {
-        LocalDateTime dateTime = LocalDateTime.of(date, time);
-        if (dateTime.minusMinutes(behindMinutes).isAfter(LocalDateTime.now())) {
+    private boolean checkDateTime(LocalDateTime showDateTime) {
+        if (showDateTime.isAfter(LocalDateTime.now())) {
             return true;
         } else {
-            errorMessage = INVALID_DATE;
+            errorMessage = INVALID_DATE_TO_BUY;
+            return false;
+        }
+    }
+
+    private boolean checkDateTime(LocalDateTime showDateTime, long behindMinutes) {
+        if (showDateTime.minusMinutes(behindMinutes).isAfter(LocalDateTime.now())) {
+            return true;
+        } else {
+            errorMessage = INVALID_DATE_TO_RETURN;
             return false;
         }
     }
 
     private boolean checkFreeTickets(Movie movie) {
         Optional<Ticket> ticket = movie.getTickets().stream()
-                .filter(t -> t.getUserId() == 0)
+                .filter(t -> t.getUser() == null)
                 .findFirst();
         if (ticket.isPresent()) {
             freeTicket = ticket.get();

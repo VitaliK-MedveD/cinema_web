@@ -47,7 +47,7 @@
         <td><input type="submit" name="continue" value="Continue" /></td>
     </tr>
     <tr>
-        <td><input type="button" onclick="location.href='/admin/menu'" value="Go Back"/></td>
+        <td><input type="button" onclick="location.href='/admin/menu'" value="Go main menu"/></td>
     </tr>
     </tbody>
 </table>

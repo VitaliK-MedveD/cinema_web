@@ -4,6 +4,7 @@ import by.it.medved.entities.User;
 import by.it.medved.services.EncryptionService;
 import by.it.medved.services.EncryptionServiceImpl;
 import by.it.medved.services.UserService;
+import org.hibernate.Hibernate;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -35,6 +36,7 @@ public class SingInUserController extends HttpServlet {
         Optional<User> optionalUser = userService.getUserByLogin(login);
         if (optionalUser.isPresent()) {
             User user = optionalUser.get();
+            Hibernate.initialize(user.getTickets());
             if (encryptionService.authenticate(password, user.getPassword(), user.getSalt())) {
                 HttpSession session = req.getSession();
                 session.setAttribute(USER, user);

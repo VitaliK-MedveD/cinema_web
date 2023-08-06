@@ -1,7 +1,7 @@
 package by.it.medved.services;
 
-import by.it.medved.entities.Role;
 import by.it.medved.entities.User;
+import by.it.medved.enums.Role;
 import by.it.medved.repositories.UserRepository;
 import by.it.medved.repositories.UserRepositoryImpl;
 
@@ -53,17 +53,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public boolean deleteUserById(Long id) {
-        return userRepository.deleteUserById(id);
+    public void deleteUserById(Long id) {
+        userRepository.deleteUserById(id);
     }
 
     @Override
     public Optional<User> getUserByLogin(String login) {
-        List<User> users = getAllUsers();
-        Optional<User> optionalUser = users.stream()
-                .filter(user -> user.getLogin().equals(login))
-                .findFirst();
-        return optionalUser;
+        return userRepository.getUserByLogin(login);
     }
 
     @Override

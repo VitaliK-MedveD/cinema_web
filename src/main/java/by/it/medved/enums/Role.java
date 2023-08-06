@@ -1,4 +1,4 @@
-package by.it.medved.entities;
+package by.it.medved.enums;
 
 public enum Role {
 

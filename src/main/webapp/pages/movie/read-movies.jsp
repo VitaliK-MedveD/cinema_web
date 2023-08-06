@@ -18,8 +18,7 @@
         <tr>
             <th></th>
             <th>Movie Title</th>
-            <th>Show Date</th>
-            <th>Show Time</th>
+            <th>Show Date and Time</th>
             <th>Price</th>
             <th>Age Limit</th>
             <th>Free Tickets</th>
@@ -30,11 +29,10 @@
             <tr>
                 <td><input type="radio" name="movieId" value="${movie.id}"/></td>
                 <td>${movie.movieTitle}</td>
-                <td>${movie.showDate}</td>
-                <td>${movie.showTime}</td>
+                <td>${movie.showDateTime}</td>
                 <td>${movie.price}</td>
                 <td>${movie.ageLimit}</td>
-                <td>${movie.freeTickets}</td>
+                <td>${movie.countFreeTickets}</td>
             </tr>
         </c:forEach>
         </tbody>

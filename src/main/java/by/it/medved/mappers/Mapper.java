@@ -1,13 +1,15 @@
 package by.it.medved.mappers;
 
 import by.it.medved.entities.Movie;
-import by.it.medved.entities.Role;
+import by.it.medved.enums.Role;
 import by.it.medved.entities.User;
 import by.it.medved.services.EncryptionService;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.ArrayList;
 
 import static by.it.medved.services.EncryptionServiceImpl.getEncryptionService;
 
@@ -39,18 +41,18 @@ public class Mapper {
                 .dateBirthday(LocalDate.parse(dateBirthday))
                 .dateCreated(LocalDate.now())
                 .salt(salt)
+                .tickets(new ArrayList<>())
                 .build();
     }
 
     public Movie buildMovie(String movieTitle, String showDate, String showTime, String price, String ageLimit) {
-        Movie movie = Movie.builder()
+        return Movie.builder()
                 .movieTitle(movieTitle)
-                .showDate(LocalDate.parse(showDate))
-                .showTime(LocalTime.parse(showTime))
-                .price(Integer.parseInt(price))
+                .showDateTime(LocalDateTime.of(LocalDate.parse(showDate), LocalTime.parse(showTime)))
+                .price(BigDecimal.valueOf(Double.parseDouble(price)))
                 .ageLimit(Integer.parseInt(ageLimit))
                 .build();
-        return movie;
+
     }
 
     private Mapper() {

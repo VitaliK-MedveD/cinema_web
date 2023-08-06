@@ -1,18 +1,15 @@
 package by.it.medved.repositories;
 
 import by.it.medved.entities.Ticket;
-
-import java.util.List;
+import by.it.medved.entities.User;
 
 public interface TicketRepository {
 
-    boolean createTicket(Ticket ticket);
+    Ticket createTicket(Ticket ticket);
 
-    List<Ticket> getAllTickets(Long id, String columnName);
+    Ticket getTicketById(Long id);
 
-    boolean buyOrReturnTicket(Long ticketId, Long personId);
+    boolean buyTicket(Long ticketId, User user);
 
-    boolean updateTicket(Ticket ticket);
-
-    boolean deleteTicketById(Long id);
+    boolean returnTicket(Long ticketId);
 }

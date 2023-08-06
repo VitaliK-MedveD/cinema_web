@@ -8,15 +8,15 @@ import java.util.List;
 
 public interface TicketService {
 
-    boolean addTenTickets(Movie movie);
+    List<Ticket> addTenTickets(Movie movie);
+
+    Ticket getTicketById(Long id);
 
     boolean buyTicket(User user, Movie movie);
 
+    boolean returnTicket(Ticket ticket);
+
     String getErrorMessage();
 
-    List<Ticket> getAllTickets(Long id, String columnName);
-
-    boolean updateTicket(Ticket ticket);
-
-    boolean deleteTicket(Ticket ticket);
+    Ticket getTicket();
 }

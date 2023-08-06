@@ -1,21 +1,47 @@
 package by.it.medved.entities;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
-import java.time.LocalDate;
-import java.time.LocalTime;
+import javax.persistence.*;
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+
+import static by.it.medved.util.Columns.*;
+
 
 @Data
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@Entity
+@Table(name = "TICKET")
 public class Ticket {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = ID)
     private Long id;
-    private Long movieId;
-    private Long userId;
+
+    @ManyToOne
+    @JoinColumn(name = MOVIE_ID)
+    private Movie movie;
+
+    @ManyToOne
+    @JoinColumn(name = USER_ID)
+    private User user;
+
+    @Column(name = MOVIE_TITLE)
     private String movieTitle;
-    private LocalDate showDate;
-    private LocalTime showTime;
+
+    @Column(name = SHOW_DATE_TIME)
+    private LocalDateTime showDateTime;
+
+    @Column(name = NUMBER_PLACE)
     private int numberOfPlace;
-    private int price;
+
+    @Column(name = PRICE)
+    private BigDecimal price;
 }

@@ -3,6 +3,7 @@ package by.it.medved.controllers.user;
 import by.it.medved.entities.User;
 import by.it.medved.mappers.Mapper;
 import by.it.medved.services.UserService;
+import org.hibernate.Hibernate;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -25,13 +26,13 @@ public class CreateUserController extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        User user = userMapper.buildUser(
+        User createdUser = userMapper.buildUser(
                 req.getParameter(LOGIN),
                 req.getParameter(PASSWORD),
                 req.getParameter(FIRST_NAME),
                 req.getParameter(EMAIL),
                 req.getParameter(DATE_BIRTHDAY));
-        userService.createUser(user);
+        User user = userService.createUser(createdUser);
         HttpSession session = req.getSession();
         session.setAttribute(USER, user);
         doGet(req, resp);

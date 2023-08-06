@@ -18,11 +18,13 @@
     <tr>
       <td>${selectedUser.login}</td>
       <td>${selectedUser.role}</td>
+      <td><p style="color: red"><b>${noTickets}</b></p></td>
     </tr>
   </table>
-  <p><button name="action" value="editRole" >Edit Role</button></p>
+  <p><button name="action" value="returnUserTicket" >Return user ticket</button></p>
+  <p><button name="action" value="editRole" >Edit role</button></p>
   <p><button name="action" value="delete" >Delete</button></p>
-  <p><button name="action" value="back" >Go back</button></p>
+  <p><button name="action" value="back" >Go main menu</button></p>
 </form>
 </body>
 </html>

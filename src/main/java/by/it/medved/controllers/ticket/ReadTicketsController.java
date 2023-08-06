@@ -1,8 +1,8 @@
-package by.it.medved.controllers.user;
+package by.it.medved.controllers.ticket;
 
-import by.it.medved.enums.Role;
+import by.it.medved.entities.Ticket;
 import by.it.medved.entities.User;
-import by.it.medved.services.UserService;
+import org.hibernate.Hibernate;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -13,24 +13,27 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.List;
 
-import static by.it.medved.services.UserServiceImpl.getUserService;
 import static by.it.medved.util.FieldsEntities.*;
-import static by.it.medved.util.Link.*;
+import static by.it.medved.util.Link.AUTHORIZATION_CONTROLLER_URI;
+import static by.it.medved.util.Link.TICKETS_PAGE;
+import static by.it.medved.util.Message.TICKETS_EMPTY;
 
-@WebServlet(urlPatterns = "/user/read")
-public class ReadUsersController extends HttpServlet {
+@WebServlet(urlPatterns = "/ticket/read")
+public class ReadTicketsController extends HttpServlet {
 
-    private final UserService userService = getUserService();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         HttpSession session = req.getSession();
         User user = (User) session.getAttribute(USER);
-        List<User> users = userService.getAllUsers();
-        users.removeIf(person -> person.getRole().equals(Role.SUPER_ADMIN));
-        users.removeIf(person -> person.getLogin().equals(user.getLogin()));
-        req.setAttribute(USERS, users);
-        req.getRequestDispatcher(USERS_PAGE).forward(req, resp);
+        List<Ticket> tickets = user.getTickets();
+        if (!tickets.isEmpty()) {
+            req.setAttribute(TICKETS, tickets);
+            req.getRequestDispatcher(TICKETS_PAGE).forward(req, resp);
+        } else {
+            req.setAttribute(NO_TICKETS, TICKETS_EMPTY);
+            req.getRequestDispatcher(AUTHORIZATION_CONTROLLER_URI).forward(req, resp);
+        }
     }
 
     @Override
