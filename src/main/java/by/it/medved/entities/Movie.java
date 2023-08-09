@@ -50,11 +50,4 @@ public class Movie {
                 .filter(ticket -> ticket.getUser() == null)
                 .count();
     }
-
-    public void updateTickets () {
-        for (Ticket ticket : tickets) {
-            ticket.setShowDateTime(showDateTime);
-            ticket.setPrice(price);
-        }
-    }
 }

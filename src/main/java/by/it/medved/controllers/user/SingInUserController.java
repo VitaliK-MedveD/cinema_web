@@ -36,7 +36,7 @@ public class SingInUserController extends HttpServlet {
         Optional<User> optionalUser = userService.getUserByLogin(login);
         if (optionalUser.isPresent()) {
             User user = optionalUser.get();
-            Hibernate.initialize(user.getTickets());
+//            Hibernate.initialize(user.getTickets());
             if (encryptionService.authenticate(password, user.getPassword(), user.getSalt())) {
                 HttpSession session = req.getSession();
                 session.setAttribute(USER, user);

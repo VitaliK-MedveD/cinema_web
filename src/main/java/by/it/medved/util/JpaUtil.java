@@ -7,8 +7,6 @@ import javax.persistence.Persistence;
 
 public final class JpaUtil {
 
-    private static EntityManager entityManager;
-
     public static EntityManager getEntityManager() {
         EntityManagerFactory entityManagerFactory = Persistence
                     .createEntityManagerFactory("CinemaWebPersistence");

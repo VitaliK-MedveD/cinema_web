@@ -24,7 +24,7 @@ public class ReadMoviesController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         HttpSession session = req.getSession();
-        List<Movie> movies = movieService.getAllMovies();
+        List<Movie> movies = movieService.getMovies();
         session.setAttribute(MOVIES, movies);
         req.getRequestDispatcher(MOVIES_PAGE).forward(req, resp);
     }

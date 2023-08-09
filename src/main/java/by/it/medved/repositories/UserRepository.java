@@ -14,7 +14,7 @@ public interface UserRepository {
 
     Optional<User> getUserByLogin(String login);
 
-    List<User> getAllUsers();
+    List<User> getUsers();
 
     boolean updateRole(Long id, Role role);
 

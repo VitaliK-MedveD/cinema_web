@@ -1,7 +1,6 @@
 package by.it.medved.controllers.ticket;
 
 import by.it.medved.entities.Ticket;
-import by.it.medved.entities.User;
 import by.it.medved.services.TicketService;
 import by.it.medved.util.Message;
 
@@ -15,10 +14,9 @@ import java.io.IOException;
 
 import static by.it.medved.services.TicketServiceImpl.getTicketService;
 import static by.it.medved.util.FieldsEntities.*;
-import static by.it.medved.util.FieldsEntities.ERROR_MESSAGE;
 import static by.it.medved.util.Link.AUTHORIZATION_CONTROLLER_URI;
 
-@WebServlet (urlPatterns = "/ticket/return")
+@WebServlet(urlPatterns = "/ticket/return")
 public class ReturnTicketController extends HttpServlet {
 
     private final TicketService ticketService = getTicketService();
@@ -27,13 +25,10 @@ public class ReturnTicketController extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         HttpSession session = req.getSession();
         Long ticketId = Long.parseLong(req.getParameter(TICKET_ID));
-        User user = (User) session.getAttribute(USER);
         Ticket ticket = ticketService.getTicketById(ticketId);
         String message;
         if (ticketService.returnTicket(ticket)) {
             message = Message.RETURN_SUCCESSFULLY;
-            user.removeTicket(ticket);
-            session.setAttribute(USER, user);
             session.setAttribute(MESSAGE, message);
             doGet(req, resp);
         } else {

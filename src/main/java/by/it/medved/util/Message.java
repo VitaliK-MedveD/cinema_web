@@ -16,6 +16,7 @@ public final class Message {
     public static final String REGEX_EMAIL = "Doesn't match email format";
     public static final String REGEX_DATE = "Date input format: YYYY-MM-DD";
     public static final String UPDATE_SUCCESSFUL = "Update successful";
+    public static final String BUY_SUCCESSFULLY = "Ticket buy successfully";
     public static final String RETURN_SUCCESSFULLY = "Ticket return successfully";
     public static final String USER_TICKETS_EMPTY = "The user has no buyed tickets";
     public static final String TICKETS_EMPTY = "You has no buyed tickets";

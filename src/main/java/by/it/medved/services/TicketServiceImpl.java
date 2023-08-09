@@ -5,7 +5,9 @@ import by.it.medved.entities.Ticket;
 import by.it.medved.entities.User;
 import by.it.medved.repositories.TicketRepository;
 import by.it.medved.repositories.TicketRepositoryImpl;
+import org.apache.commons.collections.CollectionUtils;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.Period;
@@ -55,6 +57,29 @@ public class TicketServiceImpl implements TicketService {
     }
 
     @Override
+    public List<Ticket> getUserTickets(Long userId) {
+        return ticketRepository.getUserTickets(userId);
+    }
+
+    @Override
+    public List<Ticket> getMovieTickets(Long movieId) {
+        return ticketRepository.getMovieTickets(movieId);
+    }
+
+    @Override
+    public void updateMovieTickets(Long movieId, LocalDateTime showDateTime, BigDecimal price) {
+        List<Ticket> tickets = getMovieTickets(movieId);
+        for (Ticket ticket : tickets) {
+            ticketRepository.updateMovieTicket(ticket.getId(), showDateTime, price);
+        }
+    }
+
+    @Override
+    public int getCountFreeTickets(Long movieId) {
+        return ticketRepository.getCountFreeTickets(movieId);
+    }
+
+    @Override
     public boolean buyTicket(User user, Movie movie) {
         if (checkDateTime(movie.getShowDateTime()) &&
                 checkAge(movie.getAgeLimit(), user.getDateBirthday()) && checkFreeTickets(movie)) {
@@ -67,6 +92,16 @@ public class TicketServiceImpl implements TicketService {
         if (checkDateTime(ticket.getShowDateTime(), 10L)) {
             return ticketRepository.returnTicket(ticket.getId());
         } else return false;
+    }
+
+    @Override
+    public void returnUserTickets(Long userId) {
+        List<Ticket> tickets = getUserTickets(userId);
+        if (CollectionUtils.isNotEmpty(tickets)) {
+            for (Ticket ticket : tickets) {
+                ticketRepository.returnTicket(ticket.getId());
+            }
+        }
     }
 
     @Override
@@ -108,7 +143,7 @@ public class TicketServiceImpl implements TicketService {
     }
 
     private boolean checkFreeTickets(Movie movie) {
-        Optional<Ticket> ticket = movie.getTickets().stream()
+        Optional<Ticket> ticket = getMovieTickets(movie.getId()).stream()
                 .filter(t -> t.getUser() == null)
                 .findFirst();
         if (ticket.isPresent()) {

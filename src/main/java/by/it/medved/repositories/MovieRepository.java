@@ -12,9 +12,9 @@ public interface MovieRepository {
 
     Movie getMovieById(Long id);
 
-    List<Movie> getAllMovies();
+    List<Movie> getMovies();
 
     Movie updateMovie(Long id, LocalDateTime showDateTime, BigDecimal price);
 
-    Movie deleteMovieById(Long id);
+    void deleteMovieById(Long id);
 }

@@ -11,8 +11,11 @@ import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import static by.it.medved.services.TicketServiceImpl.getTicketService;
+
 public class UserServiceImpl implements UserService {
 
+    private final TicketService ticketService = getTicketService();
     private final UserRepository userRepository = new UserRepositoryImpl();
     private static volatile UserService userService;
 
@@ -38,8 +41,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public Optional<User> getUserByLogin(String login) {
+        return userRepository.getUserByLogin(login);
+    }
+
+    @Override
     public List<User> getAllUsers() {
-        return userRepository.getAllUsers();
+        return userRepository.getUsers();
     }
 
     @Override
@@ -54,12 +62,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void deleteUserById(Long id) {
+        ticketService.returnUserTickets(id);
         userRepository.deleteUserById(id);
-    }
-
-    @Override
-    public Optional<User> getUserByLogin(String login) {
-        return userRepository.getUserByLogin(login);
     }
 
     @Override

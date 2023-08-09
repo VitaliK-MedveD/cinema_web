@@ -37,24 +37,31 @@ public class MovieServiceImpl implements MovieService {
 
     @Override
     public Movie getMovieById(Long id) {
-        return movieRepository.getMovieById(id);
+        Movie movie = movieRepository.getMovieById(id);
+        movie.setCountFreeTickets(ticketService.getCountFreeTickets(movie.getId()));
+        return movie;
     }
 
     @Override
-    public List<Movie> getAllMovies() {
-        return movieRepository.getAllMovies();
+    public List<Movie> getMovies() {
+        List<Movie> movies = movieRepository.getMovies();
+        for (Movie movie : movies) {
+            movie.setCountFreeTickets(ticketService.getCountFreeTickets(movie.getId()));
+        }
+        return movies;
     }
 
     @Override
     public Movie updateMovie(Long id, String showDateTime, String price) {
-        LocalDateTime DateTime = LocalDateTime.parse(showDateTime);
+        LocalDateTime dateTime = LocalDateTime.parse(showDateTime);
         BigDecimal bigDecimalPrice = BigDecimal.valueOf(Double.parseDouble(price));
-        return movieRepository.updateMovie(id, DateTime, bigDecimalPrice);
+        ticketService.updateMovieTickets(id, dateTime, bigDecimalPrice);
+        return movieRepository.updateMovie(id, dateTime, bigDecimalPrice);
     }
 
     @Override
-    public Movie deleteMovie(Long id) {
-        return movieRepository.deleteMovieById(id);
+    public void deleteMovie(Long id) {
+        movieRepository.deleteMovieById(id);
     }
 
     private MovieServiceImpl() {

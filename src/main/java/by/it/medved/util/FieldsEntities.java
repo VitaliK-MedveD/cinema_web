@@ -2,6 +2,7 @@ package by.it.medved.util;
 
 public final class FieldsEntities {
 
+    public static final String ID = "id";
     public static final String USER = "user";
     public static final String SELECTED_USER = "selectedUser";
     public static final String VERIFIED_USER = "verifiedUser";

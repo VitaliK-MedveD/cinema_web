@@ -41,7 +41,6 @@ public class Mapper {
                 .dateBirthday(LocalDate.parse(dateBirthday))
                 .dateCreated(LocalDate.now())
                 .salt(salt)
-                .tickets(new ArrayList<>())
                 .build();
     }
 

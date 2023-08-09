@@ -15,11 +15,11 @@ import java.io.IOException;
 import static by.it.medved.services.TicketServiceImpl.getTicketService;
 import static by.it.medved.util.FieldsEntities.*;
 import static by.it.medved.util.Link.AUTHORIZATION_CONTROLLER_URI;
+import static by.it.medved.util.Message.BUY_SUCCESSFULLY;
 
 @WebServlet(urlPatterns = "/ticket/buy")
 public class BuyTicketController extends HttpServlet {
 
-    private static final String BUY_SUCCESSFULLY = "Ticket buy successfully";
     private final TicketService ticketService = getTicketService();
 
     @Override
@@ -31,8 +31,6 @@ public class BuyTicketController extends HttpServlet {
         if (ticketService.buyTicket(user, selectedMovie)) {
             message = BUY_SUCCESSFULLY;
             session.setAttribute(MESSAGE, message);
-            user.addTicket(ticketService.getTicket());
-            session.setAttribute(USER, user);
             doGet(req, resp);
         } else {
             message = ticketService.getErrorMessage();

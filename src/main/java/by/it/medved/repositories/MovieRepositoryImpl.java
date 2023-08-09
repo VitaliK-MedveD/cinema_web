@@ -1,14 +1,17 @@
 package by.it.medved.repositories;
 
 import by.it.medved.entities.Movie;
+import by.it.medved.services.TicketService;
 
 import javax.persistence.EntityManager;
+import javax.persistence.criteria.*;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import static by.it.medved.services.TicketServiceImpl.getTicketService;
+import static by.it.medved.util.FieldsEntities.*;
 import static by.it.medved.util.JpaUtil.getEntityManager;
-import static by.it.medved.util.JpqlQuery.READ_ALL_MOVIES;
 
 public class MovieRepositoryImpl implements MovieRepository {
 
@@ -26,22 +29,27 @@ public class MovieRepositoryImpl implements MovieRepository {
     public Movie getMovieById(Long id) {
         EntityManager entityManager = getEntityManager();
         entityManager.getTransaction().begin();
-        Movie movie = entityManager.find(Movie.class, id);
-        movie.setCountFreeTickets(movie.getCount());
+        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Movie> movieCriteriaQuery = criteriaBuilder.createQuery(Movie.class);
+        Root<Movie> movieRoot = movieCriteriaQuery.from(Movie.class);
+        movieCriteriaQuery.select(movieRoot)
+                .where(criteriaBuilder.equal(movieRoot.get(ID), id));
+        Movie movie = entityManager.createQuery(movieCriteriaQuery).getSingleResult();
         entityManager.getTransaction().commit();
         entityManager.close();
         return movie;
     }
 
     @Override
-    public List<Movie> getAllMovies() {
+    public List<Movie> getMovies() {
         EntityManager entityManager = getEntityManager();
         entityManager.getTransaction().begin();
-        List<Movie> movies = entityManager.createQuery(READ_ALL_MOVIES, Movie.class)
-                .getResultList();
-        for (Movie movie : movies) {
-            movie.setCountFreeTickets(movie.getCount());
-        }
+        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Movie> movieCriteriaQuery = criteriaBuilder.createQuery(Movie.class);
+        Root<Movie> movieRoot = movieCriteriaQuery.from(Movie.class);
+        movieCriteriaQuery.select(movieRoot);
+        List<Movie> movies = entityManager.createQuery(movieCriteriaQuery).getResultList();
+        entityManager.getTransaction().commit();
         entityManager.close();
         return movies;
     }
@@ -50,23 +58,28 @@ public class MovieRepositoryImpl implements MovieRepository {
     public Movie updateMovie(Long id, LocalDateTime showDateTime, BigDecimal price) {
         EntityManager entityManager = getEntityManager();
         entityManager.getTransaction().begin();
-        Movie movie = entityManager.find(Movie.class, id);
-        movie.setShowDateTime(showDateTime);
-        movie.setPrice(price);
-        movie.updateTickets();
+        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+        CriteriaUpdate<Movie> movieCriteriaUpdate = criteriaBuilder.createCriteriaUpdate(Movie.class);
+        Root<Movie> movieRoot = movieCriteriaUpdate.from(Movie.class);
+        movieCriteriaUpdate.set(SHOW_DATE_TIME, showDateTime);
+        movieCriteriaUpdate.set(PRICE, price);
+        movieCriteriaUpdate.where(criteriaBuilder.equal(movieRoot.get(ID), id));
+        entityManager.createQuery(movieCriteriaUpdate).executeUpdate();
         entityManager.getTransaction().commit();
         entityManager.close();
-        return movie;
+        return getMovieById(id);
     }
 
     @Override
-    public Movie deleteMovieById(Long id) {
+    public void deleteMovieById(Long id) {
         EntityManager entityManager = getEntityManager();
         entityManager.getTransaction().begin();
-        Movie movie = entityManager.find(Movie.class, id);
-        entityManager.remove(movie);
+        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+        CriteriaDelete<Movie> movieCriteriaDelete = criteriaBuilder.createCriteriaDelete(Movie.class);
+        Root<Movie> movieRoot = movieCriteriaDelete.from(Movie.class);
+        movieCriteriaDelete.where(criteriaBuilder.equal(movieRoot.get(ID), id));
+        entityManager.createQuery(movieCriteriaDelete).executeUpdate();
         entityManager.getTransaction().commit();
         entityManager.close();
-        return movie;
     }
 }
