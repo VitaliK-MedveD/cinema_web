@@ -1,107 +1,138 @@
 package by.it.medved.repositories;
 
+import by.it.medved.entities.Movie;
 import by.it.medved.entities.Ticket;
-import by.it.medved.util.ConnectionManager;
-import by.it.medved.util.DataBase;
-import by.it.medved.util.SqlRequest;
+import by.it.medved.entities.User;
 
-import java.sql.*;
-import java.util.ArrayList;
+import javax.persistence.EntityManager;
+import javax.persistence.criteria.*;
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
+
+import static by.it.medved.util.FieldsEntities.*;
+import static by.it.medved.util.JpaUtil.getEntityManager;
 
 public class TicketRepositoryImpl implements TicketRepository {
 
     @Override
-    public boolean createTicket(Ticket ticket) {
-        try (Connection connection = ConnectionManager.open()) {
-            PreparedStatement statement =
-                    connection.prepareStatement(SqlRequest.CREATE_TICKET);
-            statement.setLong(1, ticket.getMovieId());
-            statement.setString(2, ticket.getMovieTitle());
-            statement.setDate(3, Date.valueOf(ticket.getShowDate()));
-            statement.setTime(4, Time.valueOf(ticket.getShowTime()));
-            statement.setInt(5, ticket.getNumberOfPlace());
-            statement.setInt(6, ticket.getPrice());
-            statement.execute();
-            return true;
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    @Override
-    public List<Ticket> getAllTickets(Long id, String columnName) {
-        List<Ticket> tickets = new ArrayList<>();
-        try (Connection connection = ConnectionManager.open()) {
-            PreparedStatement statement = connection.prepareStatement(SqlRequest.GET_ALL_TICKETS
-                    .replace("%s", columnName));
-            statement.setLong(1, id);
-            ResultSet resultSet = statement.executeQuery();
-            while (resultSet.next()) {
-                Ticket ticket = buildTicket(resultSet);
-                tickets.add(ticket);
-            }
-            return tickets;
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    @Override
-    public boolean buyOrReturnTicket(Long ticketId, Long userId) {
-        try (Connection connection = ConnectionManager.open()) {
-            PreparedStatement statement = connection.prepareStatement(SqlRequest.BUY_OR_RETURN_TICKET);
-            statement.setLong(1, userId);
-            statement.setLong(2, ticketId);
-            statement.execute();
-            return true;
-        } catch (SQLException e) {
-            throw new RuntimeException();
-        }
-    }
-
-    @Override
-    public boolean updateTicket(Ticket ticket) {
-        try (Connection connection = ConnectionManager.open()) {
-            PreparedStatement statement = connection.prepareStatement(SqlRequest.UPDATE_TICKET);
-            statement.setLong(1, ticket.getMovieId());
-            statement.setLong(2, ticket.getUserId());
-            statement.setString(3, ticket.getMovieTitle());
-            statement.setDate(4, Date.valueOf(ticket.getShowDate()));
-            statement.setTime(5, Time.valueOf(ticket.getShowTime()));
-            statement.setInt(6, ticket.getNumberOfPlace());
-            statement.setInt(7, ticket.getPrice());
-            statement.setLong(8, ticket.getId());
-            statement.execute();
-            return true;
-        } catch (SQLException e) {
-            throw new RuntimeException();
-        }
-    }
-
-    @Override
-    public boolean deleteTicketById(Long id) {
-        try (Connection connection = ConnectionManager.open()) {
-            PreparedStatement statement = connection.prepareStatement(SqlRequest.DELETE_TICKET_BY_ID);
-            statement.setLong(1, id);
-            statement.execute();
-            return true;
-        } catch (SQLException e) {
-            throw new RuntimeException();
-        }
-    }
-
-    private Ticket buildTicket(ResultSet resultSet) throws SQLException {
-        Ticket ticket = Ticket.builder()
-                .id(resultSet.getLong(DataBase.ID))
-                .movieId(resultSet.getLong(DataBase.MOVIE_ID))
-                .userId(resultSet.getLong(DataBase.USER_ID))
-                .movieTitle(resultSet.getString(DataBase.MOVIE_TITLE))
-                .showDate(resultSet.getDate(DataBase.SHOW_DATE).toLocalDate())
-                .showTime(resultSet.getTime(DataBase.SHOW_TIME).toLocalTime())
-                .numberOfPlace(resultSet.getInt(DataBase.NUMBER_PLACE))
-                .price(resultSet.getInt(DataBase.PRICE))
-                .build();
+    public Ticket createTicket(Ticket ticket) {
+        EntityManager entityManager = getEntityManager();
+        entityManager.getTransaction().begin();
+        entityManager.persist(ticket);
+        entityManager.getTransaction().commit();
+        entityManager.close();
         return ticket;
+    }
+
+    @Override
+    public Ticket getTicketById(Long id) {
+        EntityManager entityManager = getEntityManager();
+        entityManager.getTransaction().begin();
+        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Ticket> ticketCriteriaQuery = criteriaBuilder.createQuery(Ticket.class);
+        Root<Ticket> ticketRoot = ticketCriteriaQuery.from(Ticket.class);
+        ticketCriteriaQuery
+                .select(ticketRoot)
+                .where(criteriaBuilder.equal(ticketRoot.get(ID), id));
+        Ticket ticket = entityManager.createQuery(ticketCriteriaQuery).getSingleResult();
+        entityManager.getTransaction().commit();
+        entityManager.close();
+        return ticket;
+    }
+
+    @Override
+    public List<Ticket> getUserTickets(Long userId) {
+        EntityManager entityManager = getEntityManager();
+        entityManager.getTransaction().begin();
+        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Ticket> userTicketsCriteriaQuery = criteriaBuilder.createQuery(Ticket.class);
+        Root<User> userRoot = userTicketsCriteriaQuery.from(User.class);
+        userTicketsCriteriaQuery
+                .select(userRoot.get(TICKETS))
+                .where(criteriaBuilder.equal(userRoot.get(ID), userId));
+        List<Ticket> tickets = entityManager.createQuery(userTicketsCriteriaQuery).getResultList();
+        entityManager.getTransaction().commit();
+        entityManager.close();
+        return tickets;
+    }
+
+    @Override
+    public List<Ticket> getMovieTickets(Long movieId) {
+        EntityManager entityManager = getEntityManager();
+        entityManager.getTransaction().begin();
+        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Ticket> movieTicketsCriteriaQuery = criteriaBuilder.createQuery(Ticket.class);
+        Root<Movie> movieRoot = movieTicketsCriteriaQuery.from(Movie.class);
+        movieTicketsCriteriaQuery
+                .select(movieRoot.get(TICKETS))
+                .where(criteriaBuilder.equal(movieRoot.get(ID), movieId));
+        List<Ticket> tickets = entityManager.createQuery(movieTicketsCriteriaQuery).getResultList();
+        entityManager.getTransaction().commit();
+        entityManager.close();
+        return tickets;
+    }
+
+    @Override
+    public void updateMovieTicket(Long ticketId, LocalDateTime showDateTime, BigDecimal price) {
+        EntityManager entityManager = getEntityManager();
+        entityManager.getTransaction().begin();
+        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+        CriteriaUpdate<Ticket> ticketCriteriaUpdate = criteriaBuilder.createCriteriaUpdate(Ticket.class);
+        Root<Ticket> ticketRoot = ticketCriteriaUpdate.from(Ticket.class);
+        ticketCriteriaUpdate
+                .set(SHOW_DATE_TIME, showDateTime)
+                .set(PRICE, price)
+                .where(criteriaBuilder.equal(ticketRoot.get(ID), ticketId));
+        entityManager.createQuery(ticketCriteriaUpdate).executeUpdate();
+        entityManager.getTransaction().commit();
+        entityManager.close();
+    }
+
+    @Override
+    public boolean buyTicket(Long ticketId, User user) {
+        EntityManager entityManager = getEntityManager();
+        entityManager.getTransaction().begin();
+        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+        CriteriaUpdate<Ticket> ticketCriteriaUpdate = criteriaBuilder.createCriteriaUpdate(Ticket.class);
+        Root<Ticket> ticketRoot = ticketCriteriaUpdate.from(Ticket.class);
+        ticketCriteriaUpdate
+                .set(USER, user)
+                .where(criteriaBuilder.equal(ticketRoot.get(ID), ticketId));
+        entityManager.createQuery(ticketCriteriaUpdate).executeUpdate();
+        entityManager.getTransaction().commit();
+        entityManager.close();
+        return true;
+    }
+
+    @Override
+    public boolean returnTicket(Long ticketId) {
+        EntityManager entityManager = getEntityManager();
+        entityManager.getTransaction().begin();
+        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+        CriteriaUpdate<Ticket> ticketCriteriaUpdate = criteriaBuilder.createCriteriaUpdate(Ticket.class);
+        Root<Ticket> ticketRoot = ticketCriteriaUpdate.from(Ticket.class);
+        ticketCriteriaUpdate
+                .set(USER, null)
+                .where(criteriaBuilder.equal(ticketRoot.get(ID), ticketId));
+        entityManager.createQuery(ticketCriteriaUpdate).executeUpdate();
+        entityManager.getTransaction().commit();
+        entityManager.close();
+        return true;
+    }
+
+    @Override
+    public void deleteTicket(Long ticketId) {
+        EntityManager entityManager = getEntityManager();
+        entityManager.getTransaction().begin();
+        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+        CriteriaDelete<Ticket> ticketCriteriaDelete = criteriaBuilder.createCriteriaDelete(Ticket.class);
+        Root<Ticket> ticketRoot = ticketCriteriaDelete.from(Ticket.class);
+        ticketCriteriaDelete.where(criteriaBuilder.equal(ticketRoot.get(ID), ticketId));
+        entityManager.createQuery(ticketCriteriaDelete).executeUpdate();
+        entityManager.getTransaction().commit();
+        entityManager.close();
     }
 }

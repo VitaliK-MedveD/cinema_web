@@ -10,11 +10,9 @@ public interface MovieService {
 
     Movie getMovieById(Long id);
 
-    Movie getMovieByTitle(String title);
+    List<Movie> getMovies();
 
-    List<Movie> getAllMovies();
+    Movie updateMovie(Long id, String showDateTime, String price);
 
-    Movie updateMovie(Movie movie);
-
-    Movie deleteMovie(Movie movie);
+    void deleteMovie(Long id);
 }

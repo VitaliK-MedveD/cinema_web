@@ -1,8 +1,7 @@
 package by.it.medved.services;
 
-import by.it.medved.entities.Role;
 import by.it.medved.entities.User;
-import by.it.medved.exception.UserWasNotCreatedException;
+import by.it.medved.enums.Role;
 
 import java.util.List;
 import java.util.Optional;
@@ -13,13 +12,15 @@ public interface UserService {
 
     User getUserById(Long id);
 
-    List<User> getAllUsers();
+    List<User> getUsers();
+
+    User changeUserPassword(String newPassword, Long userId);
 
     boolean updateRole(Long id, Role role);
 
     User updateUserFields(Long id, String firstName, String email, String dateBirthday);
 
-    boolean deleteUserById(Long id);
+    void deleteUserById(Long id);
 
     Optional<User> getUserByLogin(String login);
 

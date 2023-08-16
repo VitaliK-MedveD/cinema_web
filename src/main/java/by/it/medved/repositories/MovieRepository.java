@@ -2,6 +2,8 @@ package by.it.medved.repositories;
 
 import by.it.medved.entities.Movie;
 
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.List;
 
 public interface MovieRepository {
@@ -10,11 +12,9 @@ public interface MovieRepository {
 
     Movie getMovieById(Long id);
 
-    Movie getMovieByTitle(String title);
+    List<Movie> getMovies();
 
-    List<Movie> getAllMovies();
+    Movie updateMovie(Long id, LocalDateTime showDateTime, BigDecimal price);
 
-    Movie updateMovie(Movie movie);
-
-    Movie deleteMovieById(Long id);
+    void deleteMovieById(Long id);
 }

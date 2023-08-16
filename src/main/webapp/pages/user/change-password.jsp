@@ -1,43 +1,41 @@
 <%--
   Created by IntelliJ IDEA.
   User: Professional
-  Date: 16.06.2023
-  Time: 20:06
+  Date: 11.08.2023
+  Time: 1:30
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" isELIgnored="false" %>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html>
 <head>
-    <title>Edit User</title>
+    <title>Change password</title>
 </head>
 <body>
 <table>
-    <form action="/user/edit" method="post">
+    <form action="/user/change_password" method="post">
         <tr>
-            <td><u><b>Edit Profile</b></u></td>
-            <td><b style="color: green">${updateProfileSuccessful}</b></td>
+            <td><u><b>Change password</b></u></td>
+            <td><b style="color: green">${changePasswordSuccessful}</b></td>
+            <td><p style="color: red"><b>${errorMessage}</b></p></td>
         </tr>
         <tr>
-            <td>First Name</td>
-            <td><input name="firstName" value="${user.firstName}" type="text"></td>
-            <td><p style="color: red"><b>${editUser.notValidFirstName}</b></p></td>
+            <td>Current password</td>
+            <td><input name="currentPassword" type="password"></td>
         </tr>
         <tr>
-            <td>Email</td>
-            <td><input name="email" value="${user.email}" type="text"></td>
-            <td><p style="color: red"><b>${editUser.notValidEmail}</b></p></td>
+            <td>New password</td>
+            <td><input name="newPassword" type="password"></td>
         </tr>
         <tr>
-            <td>Date Birthday</td>
-            <td><input name="dateBirthday" value="${user.dateBirthday}" title="Date Format YYYY-MM-DD" type="text"></td>
-            <td><p style="color: red"><b>${editUser.notValidDateBirthday}</b></p></td>
+            <td>Repeat new password</td>
+            <td><input name="repeatNewPassword" type="password"></td>
         </tr>
         <tr>
-            <td><input type="submit" value="Update Profile"></td>
+            <td><input type="submit" value="Change password"></td>
         </tr>
     </form>
-        <tr>
+    <tr>
         <c:choose>
             <c:when test="${user.role == 'SUPER_ADMIN'}">
                 <td><button onclick="location.href='/admin/menu'">Go main menu</button></td>
@@ -52,7 +50,7 @@
                 <td><button onclick="location.href='/user/menu'">Go main menu</button></td>
             </c:when>
         </c:choose>
-        </tr>
+    </tr>
 </table>
 </body>
 </html>

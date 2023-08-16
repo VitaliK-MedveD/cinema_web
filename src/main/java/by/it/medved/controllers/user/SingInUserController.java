@@ -4,6 +4,7 @@ import by.it.medved.entities.User;
 import by.it.medved.services.EncryptionService;
 import by.it.medved.services.EncryptionServiceImpl;
 import by.it.medved.services.UserService;
+import org.hibernate.Hibernate;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;

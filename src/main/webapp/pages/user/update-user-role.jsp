@@ -28,7 +28,7 @@
                 <option selected="selected" value="USER">User</option>
                 <option value="MANAGER">Manager</option>
                 <option value="ADMIN">Admin</option></select></td>
-            <td><input type="submit" value="Update Role"></td>
+            <td><input type="submit" value="Update role"></td>
         </tr>
     </form>
     </tbody>

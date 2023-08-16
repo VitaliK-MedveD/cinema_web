@@ -1,7 +1,7 @@
 package by.it.medved.services;
 
-import by.it.medved.entities.Role;
 import by.it.medved.entities.User;
+import by.it.medved.enums.Role;
 import by.it.medved.repositories.UserRepository;
 import by.it.medved.repositories.UserRepositoryImpl;
 
@@ -11,19 +11,19 @@ import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import static by.it.medved.services.EncryptionServiceImpl.getEncryptionService;
+import static by.it.medved.services.TicketServiceImpl.getTicketService;
 
 public class UserServiceImpl implements UserService {
 
+    private final EncryptionService encryptionService = getEncryptionService();
+    private final TicketService ticketService = getTicketService();
     private final UserRepository userRepository = new UserRepositoryImpl();
-    private static volatile UserService userService;
+    private static UserService userService;
 
     public static UserService getUserService() {
         if (userService == null) {
-            synchronized (UserService.class) {
-                if (userService == null) {
-                    userService = new UserServiceImpl();
-                }
-            }
+            userService = new UserServiceImpl();
         }
         return userService;
     }
@@ -39,8 +39,22 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<User> getAllUsers() {
-        return userRepository.getAllUsers();
+    public Optional<User> getUserByLogin(String login) {
+        return getUsers().stream()
+                .filter(user -> user.getLogin().equals(login))
+                .findFirst();
+    }
+
+    @Override
+    public List<User> getUsers() {
+        return userRepository.getUsers();
+    }
+
+    @Override
+    public User changeUserPassword(String newPassword, Long userId){
+        User user = getUserById(userId);
+        byte[] encryptedPassword = encryptionService.getEncryptedPassword(newPassword, user.getSalt());
+        return userRepository.changeUserPassword(userId, encryptedPassword);
     }
 
     @Override
@@ -50,21 +64,14 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User updateUserFields(Long id, String firstName, String email, String dateBirthday) {
-        return userRepository.updateUserFields(id, firstName, email, dateBirthday);
+        LocalDate localDateBirthday = LocalDate.parse(dateBirthday);
+        return userRepository.updateUserFields(id, firstName, email, localDateBirthday);
     }
 
     @Override
-    public boolean deleteUserById(Long id) {
-        return userRepository.deleteUserById(id);
-    }
-
-    @Override
-    public Optional<User> getUserByLogin(String login) {
-        List<User> users = getAllUsers();
-        Optional<User> optionalUser = users.stream()
-                .filter(user -> user.getLogin().equals(login))
-                .findFirst();
-        return optionalUser;
+    public void deleteUserById(Long id) {
+        ticketService.returnUserTickets(id);
+        userRepository.deleteUserById(id);
     }
 
     @Override
@@ -83,7 +90,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public boolean checkUniqueLogin(String login) {
-        List<User> users = getAllUsers();
+        List<User> users = getUsers();
         return (users.stream()
                 .noneMatch(user -> user.getLogin().equalsIgnoreCase(login)));
     }

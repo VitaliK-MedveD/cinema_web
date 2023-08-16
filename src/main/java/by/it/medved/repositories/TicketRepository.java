@@ -1,18 +1,27 @@
 package by.it.medved.repositories;
 
 import by.it.medved.entities.Ticket;
+import by.it.medved.entities.User;
 
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.List;
 
 public interface TicketRepository {
 
-    boolean createTicket(Ticket ticket);
+    Ticket createTicket(Ticket ticket);
 
-    List<Ticket> getAllTickets(Long id, String columnName);
+    Ticket getTicketById(Long id);
 
-    boolean buyOrReturnTicket(Long ticketId, Long personId);
+    List<Ticket> getUserTickets(Long userId);
 
-    boolean updateTicket(Ticket ticket);
+    List<Ticket> getMovieTickets(Long movieId);
 
-    boolean deleteTicketById(Long id);
+    void updateMovieTicket(Long ticketId, LocalDateTime showDateTime, BigDecimal price);
+
+    boolean buyTicket(Long ticketId, User user);
+
+    boolean returnTicket(Long ticketId);
+
+    void deleteTicket(Long ticketId);
 }

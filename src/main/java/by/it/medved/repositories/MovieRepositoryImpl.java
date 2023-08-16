@@ -1,119 +1,85 @@
 package by.it.medved.repositories;
 
 import by.it.medved.entities.Movie;
-import by.it.medved.util.ConnectionManager;
-import by.it.medved.util.DataBase;
-import by.it.medved.util.SqlRequest;
 
-import java.sql.*;
-import java.util.ArrayList;
+import javax.persistence.EntityManager;
+import javax.persistence.criteria.*;
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.List;
+
+import static by.it.medved.util.FieldsEntities.*;
+import static by.it.medved.util.JpaUtil.getEntityManager;
 
 public class MovieRepositoryImpl implements MovieRepository {
 
     @Override
     public Movie addMovie(Movie movie) {
-        try (Connection connection = ConnectionManager.open()) {
-            PreparedStatement statement =
-                    connection.prepareStatement(SqlRequest.ADD_MOVIE);
-            statement.setString(1, movie.getMovieTitle());
-            statement.setDate(2, Date.valueOf(movie.getShowDate()));
-            statement.setTime(3, Time.valueOf(movie.getShowTime()));
-            statement.setInt(4, movie.getPrice());
-            statement.setInt(5, movie.getAgeLimit());
-            statement.execute();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-        return getMovieByTitle(movie.getMovieTitle());
+        EntityManager entityManager = getEntityManager();
+        entityManager.getTransaction().begin();
+        entityManager.persist(movie);
+        entityManager.getTransaction().commit();
+        entityManager.close();
+        return movie;
     }
 
     @Override
     public Movie getMovieById(Long id) {
-        try (Connection connection = ConnectionManager.open()) {
-            Movie movie = new Movie();
-            PreparedStatement statement = connection.prepareStatement(SqlRequest.GET_MOVIE_BY_ID);
-            statement.setLong(1, id);
-            ResultSet resultSet = statement.executeQuery();
-            while (resultSet.next()) {
-                movie = buildMovie(resultSet);
-            }
-            return movie;
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    @Override
-    public Movie getMovieByTitle(String title) {
-        try (Connection connection = ConnectionManager.open()) {
-            Movie movie = new Movie();
-            PreparedStatement statement = connection.prepareStatement(SqlRequest.GET_MOVIE_BY_TITLE);
-            statement.setString(1, title);
-            ResultSet resultSet = statement.executeQuery();
-            if (resultSet.next()) {
-                movie = buildMovie(resultSet);
-            }
-            return movie;
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    @Override
-    public List<Movie> getAllMovies() {
-        List<Movie> movies = new ArrayList<>();
-        try (Connection connection = ConnectionManager.open()) {
-            PreparedStatement statement = connection.prepareStatement(SqlRequest.GET_ALL_MOVIES);
-            ResultSet resultSet = statement.executeQuery();
-            while (resultSet.next()) {
-                Movie movie = buildMovie(resultSet);
-                movies.add(movie);
-            }
-            return movies;
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    @Override
-    public Movie updateMovie(Movie movie) {
-        try (Connection connection = ConnectionManager.open()) {
-            PreparedStatement statement = connection.prepareStatement(SqlRequest.UPDATE_MOVIE);
-            statement.setDate(1, Date.valueOf(movie.getShowDate()));
-            statement.setTime(2, Time.valueOf(movie.getShowTime()));
-            statement.setInt(3, movie.getPrice());
-            statement.setInt(4, movie.getAgeLimit());
-            statement.setLong(5, movie.getId());
-            statement.execute();
-            return getMovieById(movie.getId());
-        } catch (SQLException e) {
-            throw new RuntimeException();
-        }
-    }
-
-    @Override
-    public Movie deleteMovieById(Long id) {
-        Movie movie = getMovieById(id);
-        try (Connection connection = ConnectionManager.open()) {
-            PreparedStatement statement = connection.prepareStatement(SqlRequest.DELETE_MOVIE_BY_ID);
-            statement.setLong(1, id);
-            statement.execute();
-            return movie;
-        } catch (SQLException e) {
-            throw new RuntimeException();
-        }
-    }
-
-    private Movie buildMovie(ResultSet resultSet) throws SQLException {
-        Movie movie = Movie.builder()
-                .id(resultSet.getLong(DataBase.ID))
-                .movieTitle(resultSet.getString(DataBase.MOVIE_TITLE))
-                .showDate(resultSet.getDate(DataBase.SHOW_DATE).toLocalDate())
-                .showTime(resultSet.getTime(DataBase.SHOW_TIME).toLocalTime())
-                .price(resultSet.getInt(DataBase.PRICE))
-                .ageLimit(resultSet.getInt(DataBase.AGE_LIMIT))
-                .build();
+        EntityManager entityManager = getEntityManager();
+        entityManager.getTransaction().begin();
+        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Movie> movieCriteriaQuery = criteriaBuilder.createQuery(Movie.class);
+        Root<Movie> movieRoot = movieCriteriaQuery.from(Movie.class);
+        movieCriteriaQuery
+                .select(movieRoot)
+                .where(criteriaBuilder.equal(movieRoot.get(ID), id));
+        Movie movie = entityManager.createQuery(movieCriteriaQuery).getSingleResult();
+        entityManager.getTransaction().commit();
+        entityManager.close();
         return movie;
+    }
+
+    @Override
+    public List<Movie> getMovies() {
+        EntityManager entityManager = getEntityManager();
+        entityManager.getTransaction().begin();
+        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Movie> movieCriteriaQuery = criteriaBuilder.createQuery(Movie.class);
+        Root<Movie> movieRoot = movieCriteriaQuery.from(Movie.class);
+        movieCriteriaQuery.select(movieRoot);
+        List<Movie> movies = entityManager.createQuery(movieCriteriaQuery).getResultList();
+        entityManager.getTransaction().commit();
+        entityManager.close();
+        return movies;
+    }
+
+    @Override
+    public Movie updateMovie(Long id, LocalDateTime showDateTime, BigDecimal price) {
+        EntityManager entityManager = getEntityManager();
+        entityManager.getTransaction().begin();
+        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+        CriteriaUpdate<Movie> movieCriteriaUpdate = criteriaBuilder.createCriteriaUpdate(Movie.class);
+        Root<Movie> movieRoot = movieCriteriaUpdate.from(Movie.class);
+        movieCriteriaUpdate
+                .set(SHOW_DATE_TIME, showDateTime)
+                .set(PRICE, price)
+                .where(criteriaBuilder.equal(movieRoot.get(ID), id));
+        entityManager.createQuery(movieCriteriaUpdate).executeUpdate();
+        entityManager.getTransaction().commit();
+        entityManager.close();
+        return getMovieById(id);
+    }
+
+    @Override
+    public void deleteMovieById(Long id) {
+        EntityManager entityManager = getEntityManager();
+        entityManager.getTransaction().begin();
+        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+        CriteriaDelete<Movie> movieCriteriaDelete = criteriaBuilder.createCriteriaDelete(Movie.class);
+        Root<Movie> movieRoot = movieCriteriaDelete.from(Movie.class);
+        movieCriteriaDelete.where(criteriaBuilder.equal(movieRoot.get(ID), id));
+        entityManager.createQuery(movieCriteriaDelete).executeUpdate();
+        entityManager.getTransaction().commit();
+        entityManager.close();
     }
 }

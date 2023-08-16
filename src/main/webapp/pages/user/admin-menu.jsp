@@ -20,18 +20,25 @@
     <tr>
       <td><p style="color: red"><b>${errorMessage}</b></p></td>
       <td><p style="color: green"><b>${message}</b></p></td>
+      <td><p style="color: red"><b>${noTickets}</b></p></td>
     </tr>
     <tr>
-      <td><button name="action" value="showListUsers" >Show list users</button></td>
+      <td><button name="action" value="showUsers" >Show users</button></td>
     </tr>
     <tr>
-      <td><button name="action" value="editProfile" >Edit profile</button></td>
+      <td><button name="action" value="showMovies" >Show movies</button></td>
     </tr>
     <tr>
-      <td><button name="action" value="showListMovies" >Show list Movies</button></td>
+      <td><button name="action" value="addMovie" >Add movie</button></td>
     </tr>
     <tr>
-      <td><button name="action" value="addMovie" >Add Movie</button></td>
+      <td><button name="action" value="showTickets" >Show my tickets</button></td>
+    </tr>
+    <tr>
+      <td><button name="action" value="editProfile" >Edit my profile</button></td>
+    </tr>
+    <tr>
+      <td><button name="action" value="changePassword" >Change password</button></td>
     </tr>
     <tr>
       <td><button name="action" value="exit" >Exit</button></td>

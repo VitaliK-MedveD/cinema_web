@@ -46,11 +46,25 @@
     <tr>
         <td><input type="submit" name="continue" value="Continue" /></td>
     </tr>
-    <tr>
-        <td><input type="button" onclick="location.href='/admin/menu'" value="Go Back"/></td>
-    </tr>
     </tbody>
 </table>
 </form>
+<table>
+    <tbody>
+    <tr>
+        <c:choose>
+            <c:when test="${user.role == 'SUPER_ADMIN'}">
+                <td><button onclick="location.href='/admin/menu'">Go main menu</button></td>
+            </c:when>
+            <c:when test="${user.role == 'ADMIN'}">
+                <td><button onclick="location.href='/admin/menu'">Go main menu</button></td>
+            </c:when>
+            <c:when test="${user.role == 'MANAGER'}">
+                <td><button onclick="location.href='/managers/menu'">Go main menu</button></td>
+            </c:when>
+        </c:choose>
+    </tr>
+    </tbody>
+</table>
 </body>
 </html>

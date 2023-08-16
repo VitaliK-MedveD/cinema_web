@@ -4,7 +4,6 @@ import java.time.format.DateTimeFormatter;
 
 public final class Regex {
 
-    public static final DateTimeFormatter DATE_FORMAT = DateTimeFormatter.ofPattern("dd.MM.yyyy");
     public static final String LOGIN = "^[A-Za-z]\\w{3,29}$";
     public static final String PASSWORD = "^[a-zA-Z0-9_]{6,20}$";
     public static final String FIRST_NAME = "^[а-яА-ЯёЁa-zA-Z]{4,20}$";

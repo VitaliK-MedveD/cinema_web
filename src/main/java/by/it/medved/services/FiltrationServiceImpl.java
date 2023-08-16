@@ -10,15 +10,11 @@ public class FiltrationServiceImpl implements FiltrationService {
 
     private final UserService userService = getUserService();
     private UserFieldsValidationDto userFieldsValidationDto;
-    private static volatile FiltrationService filtrationService;
+    private static FiltrationService filtrationService;
 
     public static FiltrationService getFiltrationService() {
         if (filtrationService == null) {
-            synchronized (FiltrationService.class) {
-                if (filtrationService == null) {
-                    filtrationService = new FiltrationServiceImpl();
-                }
-            }
+            filtrationService = new FiltrationServiceImpl();
         }
         return filtrationService;
     }

@@ -16,6 +16,9 @@ public class EditUserMenuController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         switch (req.getParameter("action")) {
+            case RETURN_USER_TICKET:
+                req.getRequestDispatcher(READ_USER_TICKETS_URI).forward(req, resp);
+                break;
             case EDIT_ROLE:
                 req.getRequestDispatcher(USER_UPDATE_ROLE_PAGE).forward(req, resp);
                 break;
@@ -23,13 +26,14 @@ public class EditUserMenuController extends HttpServlet {
                 req.getRequestDispatcher(USER_DELETE_URI).forward(req, resp);
                 break;
             case BACK :
-                req.getRequestDispatcher(ADMIN_MENU_URI).forward(req, resp);
+                doGet(req, resp);
+//                req.getRequestDispatcher(AUTHORIZATION_CONTROLLER_URI).forward(req, resp);
                 break;
         }
     }
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        req.getRequestDispatcher(EDIT_USER_MENU_PAGE).forward(req, resp);
+        req.getRequestDispatcher(AUTHORIZATION_CONTROLLER_URI).forward(req, resp);
     }
 }
