@@ -1,4 +1,4 @@
-package by.it.medved.controllers.movie;
+package by.it.medved.controllers.menu;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -11,7 +11,7 @@ import static by.it.medved.util.Link.*;
 import static by.it.medved.util.FieldsEntities.*;
 
 @WebServlet(urlPatterns = "/movie/action")
-public class MoviesActionController extends HttpServlet {
+public class MoviesActionMenuController extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {

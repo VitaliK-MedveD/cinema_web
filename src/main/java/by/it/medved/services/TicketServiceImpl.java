@@ -12,8 +12,10 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.Period;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static by.it.medved.util.Message.*;
 
@@ -22,15 +24,11 @@ public class TicketServiceImpl implements TicketService {
     private Ticket freeTicket;
     private String errorMessage;
     private final TicketRepository ticketRepository = new TicketRepositoryImpl();
-    private static volatile TicketService ticketService;
+    private static TicketService ticketService;
 
     public static TicketService getTicketService() {
         if (ticketService == null) {
-            synchronized (UserService.class) {
-                if (ticketService == null) {
-                    ticketService = new TicketServiceImpl();
-                }
-            }
+            ticketService = new TicketServiceImpl();
         }
         return ticketService;
     }
@@ -63,7 +61,10 @@ public class TicketServiceImpl implements TicketService {
 
     @Override
     public List<Ticket> getMovieTickets(Long movieId) {
-        return ticketRepository.getMovieTickets(movieId);
+        List<Ticket> tickets = ticketRepository.getMovieTickets(movieId);
+        Comparator<Ticket> comparator = Comparator.comparing(Ticket::getNumberOfPlace);
+        tickets.sort(comparator);
+        return tickets;
     }
 
     @Override
@@ -76,7 +77,9 @@ public class TicketServiceImpl implements TicketService {
 
     @Override
     public int getCountFreeTickets(Long movieId) {
-        return ticketRepository.getCountFreeTickets(movieId);
+        return (int) getMovieTickets(movieId).stream()
+                .filter(ticket -> ticket.getUser() == null)
+                .count();
     }
 
     @Override
@@ -97,11 +100,21 @@ public class TicketServiceImpl implements TicketService {
     @Override
     public void returnUserTickets(Long userId) {
         List<Ticket> tickets = getUserTickets(userId);
-        if (CollectionUtils.isNotEmpty(tickets)) {
-            for (Ticket ticket : tickets) {
-                ticketRepository.returnTicket(ticket.getId());
-            }
-        }
+        returnTicketList(tickets);
+    }
+
+    @Override
+    public void returnMovieTickets(Long movieId) {
+        List<Ticket> tickets = getMovieTickets(movieId).stream()
+                .filter(ticket -> ticket.getUser() != null)
+                .collect(Collectors.toList());
+        returnTicketList(tickets);
+    }
+
+    @Override
+    public void deleteMovieTickets(Long movieId){
+        getMovieTickets(movieId).stream()
+                .forEach(ticket -> ticketRepository.deleteTicket(ticket.getId()));
     }
 
     @Override
@@ -112,6 +125,14 @@ public class TicketServiceImpl implements TicketService {
     @Override
     public Ticket getTicket() {
         return freeTicket;
+    }
+
+    private void returnTicketList(List<Ticket> tickets) {
+        if (CollectionUtils.isNotEmpty(tickets)) {
+            for (Ticket ticket : tickets) {
+                ticketRepository.returnTicket(ticket.getId());
+            }
+        }
     }
 
     private boolean checkAge(int ageLimit, LocalDate birthDate) {

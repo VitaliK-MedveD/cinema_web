@@ -28,6 +28,10 @@ public interface TicketService {
 
     void returnUserTickets(Long userId);
 
+    void returnMovieTickets(Long movieId);
+
+    void deleteMovieTickets(Long movieId);
+
     String getErrorMessage();
 
     Ticket getTicket();

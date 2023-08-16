@@ -45,7 +45,7 @@
         </tr>
     </form>
     <tr>
-        <td><button onclick="location.href='/admin/menu'">Go back</button></td>
+        <td><button onclick="location.href='/admin/menu'">Go main menu</button></td>
     </tr>
 </table>
 </body>

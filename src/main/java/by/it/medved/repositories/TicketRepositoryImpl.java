@@ -5,12 +5,11 @@ import by.it.medved.entities.Ticket;
 import by.it.medved.entities.User;
 
 import javax.persistence.EntityManager;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.CriteriaUpdate;
-import javax.persistence.criteria.Root;
+import javax.persistence.criteria.*;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import static by.it.medved.util.FieldsEntities.*;
@@ -35,7 +34,8 @@ public class TicketRepositoryImpl implements TicketRepository {
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaQuery<Ticket> ticketCriteriaQuery = criteriaBuilder.createQuery(Ticket.class);
         Root<Ticket> ticketRoot = ticketCriteriaQuery.from(Ticket.class);
-        ticketCriteriaQuery.select(ticketRoot)
+        ticketCriteriaQuery
+                .select(ticketRoot)
                 .where(criteriaBuilder.equal(ticketRoot.get(ID), id));
         Ticket ticket = entityManager.createQuery(ticketCriteriaQuery).getSingleResult();
         entityManager.getTransaction().commit();
@@ -50,9 +50,13 @@ public class TicketRepositoryImpl implements TicketRepository {
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaQuery<Ticket> userTicketsCriteriaQuery = criteriaBuilder.createQuery(Ticket.class);
         Root<User> userRoot = userTicketsCriteriaQuery.from(User.class);
-        userTicketsCriteriaQuery.select(userRoot.get(TICKETS))
+        userTicketsCriteriaQuery
+                .select(userRoot.get(TICKETS))
                 .where(criteriaBuilder.equal(userRoot.get(ID), userId));
-        return entityManager.createQuery(userTicketsCriteriaQuery).getResultList();
+        List<Ticket> tickets = entityManager.createQuery(userTicketsCriteriaQuery).getResultList();
+        entityManager.getTransaction().commit();
+        entityManager.close();
+        return tickets;
     }
 
     @Override
@@ -62,9 +66,13 @@ public class TicketRepositoryImpl implements TicketRepository {
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaQuery<Ticket> movieTicketsCriteriaQuery = criteriaBuilder.createQuery(Ticket.class);
         Root<Movie> movieRoot = movieTicketsCriteriaQuery.from(Movie.class);
-        movieTicketsCriteriaQuery.select(movieRoot.get(TICKETS))
+        movieTicketsCriteriaQuery
+                .select(movieRoot.get(TICKETS))
                 .where(criteriaBuilder.equal(movieRoot.get(ID), movieId));
-        return entityManager.createQuery(movieTicketsCriteriaQuery).getResultList();
+        List<Ticket> tickets = entityManager.createQuery(movieTicketsCriteriaQuery).getResultList();
+        entityManager.getTransaction().commit();
+        entityManager.close();
+        return tickets;
     }
 
     @Override
@@ -74,20 +82,13 @@ public class TicketRepositoryImpl implements TicketRepository {
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaUpdate<Ticket> ticketCriteriaUpdate = criteriaBuilder.createCriteriaUpdate(Ticket.class);
         Root<Ticket> ticketRoot = ticketCriteriaUpdate.from(Ticket.class);
-        ticketCriteriaUpdate.set(SHOW_DATE_TIME, showDateTime);
-        ticketCriteriaUpdate.set(PRICE, price);
-        ticketCriteriaUpdate.where(criteriaBuilder.equal(ticketRoot.get(ID), ticketId));
+        ticketCriteriaUpdate
+                .set(SHOW_DATE_TIME, showDateTime)
+                .set(PRICE, price)
+                .where(criteriaBuilder.equal(ticketRoot.get(ID), ticketId));
         entityManager.createQuery(ticketCriteriaUpdate).executeUpdate();
         entityManager.getTransaction().commit();
         entityManager.close();
-    }
-
-    @Override
-    public int getCountFreeTickets (Long movieId){
-        List<Ticket> tickets = getMovieTickets(movieId);
-        return (int) tickets.stream()
-                .filter(ticket -> ticket.getUser() == null)
-                .count();
     }
 
     @Override
@@ -97,7 +98,8 @@ public class TicketRepositoryImpl implements TicketRepository {
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaUpdate<Ticket> ticketCriteriaUpdate = criteriaBuilder.createCriteriaUpdate(Ticket.class);
         Root<Ticket> ticketRoot = ticketCriteriaUpdate.from(Ticket.class);
-        ticketCriteriaUpdate.set(USER, user)
+        ticketCriteriaUpdate
+                .set(USER, user)
                 .where(criteriaBuilder.equal(ticketRoot.get(ID), ticketId));
         entityManager.createQuery(ticketCriteriaUpdate).executeUpdate();
         entityManager.getTransaction().commit();
@@ -112,11 +114,25 @@ public class TicketRepositoryImpl implements TicketRepository {
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaUpdate<Ticket> ticketCriteriaUpdate = criteriaBuilder.createCriteriaUpdate(Ticket.class);
         Root<Ticket> ticketRoot = ticketCriteriaUpdate.from(Ticket.class);
-        ticketCriteriaUpdate.set(USER, null)
+        ticketCriteriaUpdate
+                .set(USER, null)
                 .where(criteriaBuilder.equal(ticketRoot.get(ID), ticketId));
         entityManager.createQuery(ticketCriteriaUpdate).executeUpdate();
         entityManager.getTransaction().commit();
         entityManager.close();
         return true;
+    }
+
+    @Override
+    public void deleteTicket(Long ticketId) {
+        EntityManager entityManager = getEntityManager();
+        entityManager.getTransaction().begin();
+        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+        CriteriaDelete<Ticket> ticketCriteriaDelete = criteriaBuilder.createCriteriaDelete(Ticket.class);
+        Root<Ticket> ticketRoot = ticketCriteriaDelete.from(Ticket.class);
+        ticketCriteriaDelete.where(criteriaBuilder.equal(ticketRoot.get(ID), ticketId));
+        entityManager.createQuery(ticketCriteriaDelete).executeUpdate();
+        entityManager.getTransaction().commit();
+        entityManager.close();
     }
 }

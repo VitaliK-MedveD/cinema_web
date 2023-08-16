@@ -1,7 +1,6 @@
 package by.it.medved.repositories;
 
 import by.it.medved.entities.Movie;
-import by.it.medved.services.TicketService;
 
 import javax.persistence.EntityManager;
 import javax.persistence.criteria.*;
@@ -9,7 +8,6 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import static by.it.medved.services.TicketServiceImpl.getTicketService;
 import static by.it.medved.util.FieldsEntities.*;
 import static by.it.medved.util.JpaUtil.getEntityManager;
 
@@ -32,7 +30,8 @@ public class MovieRepositoryImpl implements MovieRepository {
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaQuery<Movie> movieCriteriaQuery = criteriaBuilder.createQuery(Movie.class);
         Root<Movie> movieRoot = movieCriteriaQuery.from(Movie.class);
-        movieCriteriaQuery.select(movieRoot)
+        movieCriteriaQuery
+                .select(movieRoot)
                 .where(criteriaBuilder.equal(movieRoot.get(ID), id));
         Movie movie = entityManager.createQuery(movieCriteriaQuery).getSingleResult();
         entityManager.getTransaction().commit();
@@ -61,9 +60,10 @@ public class MovieRepositoryImpl implements MovieRepository {
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaUpdate<Movie> movieCriteriaUpdate = criteriaBuilder.createCriteriaUpdate(Movie.class);
         Root<Movie> movieRoot = movieCriteriaUpdate.from(Movie.class);
-        movieCriteriaUpdate.set(SHOW_DATE_TIME, showDateTime);
-        movieCriteriaUpdate.set(PRICE, price);
-        movieCriteriaUpdate.where(criteriaBuilder.equal(movieRoot.get(ID), id));
+        movieCriteriaUpdate
+                .set(SHOW_DATE_TIME, showDateTime)
+                .set(PRICE, price)
+                .where(criteriaBuilder.equal(movieRoot.get(ID), id));
         entityManager.createQuery(movieCriteriaUpdate).executeUpdate();
         entityManager.getTransaction().commit();
         entityManager.close();

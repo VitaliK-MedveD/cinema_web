@@ -16,15 +16,11 @@ import static by.it.medved.services.EncryptionServiceImpl.getEncryptionService;
 public class Mapper {
 
     private final EncryptionService encryptionService = getEncryptionService();
-    private static volatile Mapper mapper;
+    private static Mapper mapper;
 
     public static Mapper getMapper() {
         if (mapper == null) {
-            synchronized (Mapper.class) {
-                if (mapper == null) {
-                    mapper = new Mapper();
-                }
-            }
+            mapper = new Mapper();
         }
         return mapper;
     }
@@ -51,7 +47,6 @@ public class Mapper {
                 .price(BigDecimal.valueOf(Double.parseDouble(price)))
                 .ageLimit(Integer.parseInt(ageLimit))
                 .build();
-
     }
 
     private Mapper() {

@@ -27,13 +27,13 @@ public class EditUserMenuController extends HttpServlet {
                 break;
             case BACK :
                 doGet(req, resp);
-//                req.getRequestDispatcher(ADMIN_MENU_URI).forward(req, resp);
+//                req.getRequestDispatcher(AUTHORIZATION_CONTROLLER_URI).forward(req, resp);
                 break;
         }
     }
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        req.getRequestDispatcher(ADMIN_MENU_PAGE).forward(req, resp);
+        req.getRequestDispatcher(AUTHORIZATION_CONTROLLER_URI).forward(req, resp);
     }
 }

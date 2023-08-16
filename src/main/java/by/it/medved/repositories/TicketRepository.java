@@ -19,9 +19,9 @@ public interface TicketRepository {
 
     void updateMovieTicket(Long ticketId, LocalDateTime showDateTime, BigDecimal price);
 
-    int getCountFreeTickets (Long movieId);
-
     boolean buyTicket(Long ticketId, User user);
 
     boolean returnTicket(Long ticketId);
+
+    void deleteTicket(Long ticketId);
 }

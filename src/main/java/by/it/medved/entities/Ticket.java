@@ -18,14 +18,14 @@ import static by.it.medved.util.Columns.*;
 @AllArgsConstructor
 @Entity
 @Table(name = "TICKET")
-public class Ticket {
+public class Ticket{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = ID)
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = MOVIE_ID)
     private Movie movie;
 
@@ -44,4 +44,5 @@ public class Ticket {
 
     @Column(name = PRICE)
     private BigDecimal price;
+
 }

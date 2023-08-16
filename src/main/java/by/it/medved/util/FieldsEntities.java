@@ -4,11 +4,15 @@ public final class FieldsEntities {
 
     public static final String ID = "id";
     public static final String USER = "user";
+    public static final String CURRENT_PASSWORD = "currentPassword";
+    public static final String NEW_PASSWORD = "newPassword";
+    public static final String REPEAT_NEW_PASSWORD = "repeatNewPassword";
     public static final String SELECTED_USER = "selectedUser";
     public static final String VERIFIED_USER = "verifiedUser";
     public static final String SELECTED_MOVIE = "selectedMovie";
     public static final String SHOW_USERS = "showUsers";
     public static final String EDIT_PROFILE = "editProfile";
+    public static final String CHANGE_PASSWORD = "changePassword";
     public static final String SHOW_TICKETS = "showTickets";
     public static final String RETURN_USER_TICKET = "returnUserTicket";
     public static final String EDIT_ROLE = "editRole";
@@ -29,6 +33,7 @@ public final class FieldsEntities {
     public static final String USERS = "users";
     public static final String MOVIES = "movies";
     public static final String TICKETS = "tickets";
+    public static final String MOVIE_TICKETS = "movieTickets";
     public static final String USER_TICKETS = "userTickets";
     public static final String USER_ID = "userId";
     public static final String LOGIN = "login";

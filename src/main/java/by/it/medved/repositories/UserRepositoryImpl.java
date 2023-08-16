@@ -7,7 +7,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.criteria.*;
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
 
 import static by.it.medved.util.FieldsEntities.*;
 import static by.it.medved.util.JpaUtil.getEntityManager;
@@ -31,20 +30,13 @@ public class UserRepositoryImpl implements UserRepository {
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaQuery<User> userCriteriaQuery = criteriaBuilder.createQuery(User.class);
         Root<User> userRoot = userCriteriaQuery.from(User.class);
-        userCriteriaQuery.select(userRoot)
+        userCriteriaQuery
+                .select(userRoot)
                 .where(criteriaBuilder.equal(userRoot.get(ID), id));
         User user = entityManager.createQuery(userCriteriaQuery).getSingleResult();
         entityManager.getTransaction().commit();
         entityManager.close();
         return user;
-    }
-
-    @Override
-    public Optional<User> getUserByLogin(String login) {
-        List<User> users = getUsers();
-        return users.stream()
-                .filter(user -> user.getLogin().equals(login))
-                .findFirst();
     }
 
     @Override
@@ -62,13 +54,30 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
+    public User changeUserPassword(Long userId, byte[] encryptedPassword) {
+        EntityManager entityManager = getEntityManager();
+        entityManager.getTransaction().begin();
+        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+        CriteriaUpdate<User> userCriteriaUpdate = criteriaBuilder.createCriteriaUpdate(User.class);
+        Root<User> userRoot = userCriteriaUpdate.from(User.class);
+        userCriteriaUpdate
+                .set(PASSWORD, encryptedPassword)
+                .where(criteriaBuilder.equal(userRoot.get(ID), userId));
+        entityManager.createQuery(userCriteriaUpdate).executeUpdate();
+        entityManager.getTransaction().commit();
+        entityManager.close();
+        return getUserById(userId);
+    }
+
+    @Override
     public boolean updateRole(Long id, Role role) {
         EntityManager entityManager = getEntityManager();
         entityManager.getTransaction().begin();
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaUpdate<User> userCriteriaUpdate = criteriaBuilder.createCriteriaUpdate(User.class);
         Root<User> userRoot = userCriteriaUpdate.from(User.class);
-        userCriteriaUpdate.set(ROLE, role)
+        userCriteriaUpdate
+                .set(ROLE, role)
                 .where(criteriaBuilder.equal(userRoot.get(ID), id));
         entityManager.createQuery(userCriteriaUpdate).executeUpdate();
         entityManager.getTransaction().commit();
@@ -77,16 +86,17 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    public User updateUserFields(Long id, String firstName, String email, String dateBirthday) {
+    public User updateUserFields(Long id, String firstName, String email, LocalDate dateBirthday) {
         EntityManager entityManager = getEntityManager();
         entityManager.getTransaction().begin();
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaUpdate<User> userCriteriaUpdate = criteriaBuilder.createCriteriaUpdate(User.class);
         Root<User> userRoot = userCriteriaUpdate.from(User.class);
-        userCriteriaUpdate.set(FIRST_NAME, firstName);
-        userCriteriaUpdate.set(EMAIL, email);
-        userCriteriaUpdate.set(DATE_BIRTHDAY, LocalDate.parse(dateBirthday));
-        userCriteriaUpdate.where(criteriaBuilder.equal(userRoot.get(ID), id));
+        userCriteriaUpdate
+                .set(FIRST_NAME, firstName)
+                .set(EMAIL, email)
+                .set(DATE_BIRTHDAY, dateBirthday)
+                .where(criteriaBuilder.equal(userRoot.get(ID), id));
         entityManager.createQuery(userCriteriaUpdate).executeUpdate();
         entityManager.getTransaction().commit();
         entityManager.close();

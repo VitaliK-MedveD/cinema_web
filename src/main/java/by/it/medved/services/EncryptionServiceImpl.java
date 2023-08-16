@@ -12,15 +12,11 @@ import java.util.Arrays;
 
 public class EncryptionServiceImpl implements EncryptionService {
 
-    private static volatile EncryptionService encryptionService;
+    private static EncryptionService encryptionService;
 
     public static EncryptionService getEncryptionService() {
         if (encryptionService == null) {
-            synchronized (EncryptionService.class) {
-                if (encryptionService == null) {
-                    encryptionService = new EncryptionServiceImpl();
-                }
-            }
+            encryptionService = new EncryptionServiceImpl();
         }
         return encryptionService;
     }

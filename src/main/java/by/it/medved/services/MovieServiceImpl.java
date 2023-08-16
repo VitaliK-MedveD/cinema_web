@@ -15,15 +15,11 @@ public class MovieServiceImpl implements MovieService {
     private final TicketService ticketService = getTicketService();
     private final MovieRepository movieRepository = new MovieRepositoryImpl();
 
-    private static volatile MovieService movieService;
+    private static MovieService movieService;
 
     public static MovieService getMovieService() {
         if (movieService == null) {
-            synchronized (MovieService.class) {
-                if (movieService == null) {
-                    movieService = new MovieServiceImpl();
-                }
-            }
+            movieService = new MovieServiceImpl();
         }
         return movieService;
     }
@@ -31,14 +27,14 @@ public class MovieServiceImpl implements MovieService {
     @Override
     public Movie addMovie(Movie movie) {
         movie.setTickets(ticketService.addTenTickets(movie));
-        movie.setCountFreeTickets(movie.getCount());
+        movie.setCountFreeTickets(getCount(movie.getId()));
         return movieRepository.addMovie(movie);
     }
 
     @Override
     public Movie getMovieById(Long id) {
         Movie movie = movieRepository.getMovieById(id);
-        movie.setCountFreeTickets(ticketService.getCountFreeTickets(movie.getId()));
+        movie.setCountFreeTickets(getCount(movie.getId()));
         return movie;
     }
 
@@ -46,7 +42,7 @@ public class MovieServiceImpl implements MovieService {
     public List<Movie> getMovies() {
         List<Movie> movies = movieRepository.getMovies();
         for (Movie movie : movies) {
-            movie.setCountFreeTickets(ticketService.getCountFreeTickets(movie.getId()));
+            movie.setCountFreeTickets(getCount(movie.getId()));
         }
         return movies;
     }
@@ -61,7 +57,13 @@ public class MovieServiceImpl implements MovieService {
 
     @Override
     public void deleteMovie(Long id) {
+        ticketService.returnMovieTickets(id);
+        ticketService.deleteMovieTickets(id);
         movieRepository.deleteMovieById(id);
+    }
+
+    private int getCount(Long movieId){
+        return ticketService.getCountFreeTickets(movieId);
     }
 
     private MovieServiceImpl() {

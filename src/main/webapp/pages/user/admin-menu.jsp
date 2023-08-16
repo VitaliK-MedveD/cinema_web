@@ -38,6 +38,9 @@
       <td><button name="action" value="editProfile" >Edit my profile</button></td>
     </tr>
     <tr>
+      <td><button name="action" value="changePassword" >Change password</button></td>
+    </tr>
+    <tr>
       <td><button name="action" value="exit" >Exit</button></td>
     </tr>
   </table>

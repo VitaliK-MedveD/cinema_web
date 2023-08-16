@@ -7,17 +7,18 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-import static by.it.medved.util.Link.*;
 import static by.it.medved.util.FieldsEntities.*;
+import static by.it.medved.util.FieldsEntities.EXIT;
+import static by.it.medved.util.Link.*;
 
-@WebServlet(urlPatterns = "/user/menu")
-public class UserMenuController extends HttpServlet {
+@WebServlet(urlPatterns = "/managers/menu")
+public class ManagerMenuController extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         switch (req.getParameter(ACTION)) {
-            case SHOW_MOVIES:
-                req.getRequestDispatcher(MOVIES_URI).forward(req, resp);
+            case SHOW_USERS:
+                req.getRequestDispatcher(USERS_READ_URI).forward(req, resp);
                 break;
             case EDIT_PROFILE:
                 req.getRequestDispatcher(USER_EDIT_PAGE).forward(req, resp);
@@ -28,6 +29,9 @@ public class UserMenuController extends HttpServlet {
             case SHOW_TICKETS:
                 req.getRequestDispatcher(TICKETS_READ_URI).forward(req, resp);
                 break;
+            case SHOW_MOVIES:
+                req.getRequestDispatcher(MOVIES_URI).forward(req, resp);
+                break;
             case EXIT:
                 req.getRequestDispatcher(EXIT_URI).forward(req, resp);
                 break;
@@ -36,6 +40,6 @@ public class UserMenuController extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        req.getRequestDispatcher(USER_MENU_PAGE).forward(req, resp);
+        req.getRequestDispatcher(MANAGER_MENU_PAGE).forward(req, resp);
     }
 }

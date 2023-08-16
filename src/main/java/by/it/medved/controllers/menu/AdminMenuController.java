@@ -22,6 +22,9 @@ public class AdminMenuController extends HttpServlet {
             case EDIT_PROFILE:
                 req.getRequestDispatcher(USER_EDIT_PAGE).forward(req, resp);
                 break;
+            case CHANGE_PASSWORD:
+                req.getRequestDispatcher(CHANGE_PASSWORD_PAGE).forward(req, resp);
+                break;
             case SHOW_TICKETS:
                 req.getRequestDispatcher(TICKETS_READ_URI).forward(req, resp);
                 break;

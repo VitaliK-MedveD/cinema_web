@@ -44,10 +44,4 @@ public class Movie {
 
     @OneToMany(mappedBy = "movie", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Ticket> tickets = new ArrayList<>();
-
-    public int getCount() {
-        return (int) tickets.stream()
-                .filter(ticket -> ticket.getUser() == null)
-                .count();
-    }
 }

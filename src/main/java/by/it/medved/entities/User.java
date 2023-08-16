@@ -8,11 +8,10 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 
 import static by.it.medved.util.Columns.*;
-import static javax.persistence.EnumType.*;
+import static javax.persistence.EnumType.STRING;
 
 @Entity
 @Table(name = "PERSON")
@@ -54,24 +53,4 @@ public class User {
 
     @OneToMany(mappedBy = "user")
     private List<Ticket> tickets;
-
-    public void addTicket(Ticket ticket){
-        if (this.tickets == null){
-            this.tickets = new ArrayList<>();
-        }
-        this.tickets.add(ticket);
-        ticket.setUser(this);
-    }
-
-    public void removeTicket(Ticket ticket){
-        this.tickets.removeIf(removeTicket -> removeTicket.getId().equals(ticket.getId()));
-        ticket.setUser(null);
-    }
-
-    public void returnTickets (){
-        if (!tickets.isEmpty()){
-            tickets.stream()
-                    .forEach(ticket -> ticket.setUser(null));
-        }
-    }
 }

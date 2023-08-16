@@ -7,7 +7,7 @@ public final class Link {
     public static final String EXIT_URI = "/exit";
     public static final String ADMIN_MENU_URI = "/admin/menu";
     public static final String ADMIN_MENU_PAGE = "/pages/user/admin-menu.jsp";
-    public static final String MANAGER_MENU_PAGE = "";
+    public static final String MANAGER_MENU_PAGE = "/pages/user/manager-menu.jsp";
     public static final String USER_CREATE_URI = "/user/create";
     public static final String USER_MENU_URI = "/user/menu";
     public static final String USER_MENU_PAGE = "/pages/user/user-menu.jsp";
@@ -18,6 +18,7 @@ public final class Link {
     public static final String USER_SING_IN_PAGE = "/pages/user/sing-In-user.jsp";
     public static final String USER_EDIT_URI = "/user/edit";
     public static final String USER_EDIT_PAGE = "/pages/user/edit-user.jsp";
+    public static final String CHANGE_PASSWORD_PAGE = "/pages/user/change-password.jsp";
     public static final String READ_USER_TICKETS_URI = "/ticket/read_userTickets";
     public static final String USER_UPDATE_ROLE_PAGE = "/pages/user/update-user-role.jsp";
     public static final String USER_UPDATE_ROLE_URI = "/user/update/role";

@@ -12,7 +12,9 @@ public interface UserService {
 
     User getUserById(Long id);
 
-    List<User> getAllUsers();
+    List<User> getUsers();
+
+    User changeUserPassword(String newPassword, Long userId);
 
     boolean updateRole(Long id, Role role);
 

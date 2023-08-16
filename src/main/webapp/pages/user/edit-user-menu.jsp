@@ -21,10 +21,24 @@
       <td><p style="color: red"><b>${noTickets}</b></p></td>
     </tr>
   </table>
-  <p><button name="action" value="returnUserTicket" >Return user ticket</button></p>
-  <p><button name="action" value="editRole" >Edit role</button></p>
-  <p><button name="action" value="delete" >Delete</button></p>
-  <p><button name="action" value="back" >Go main menu</button></p>
+  <c:choose>
+    <c:when test="${user.role == 'MANAGER'}">
+      <p><button name="action" value="returnUserTicket" >Return user ticket</button></p>
+      <p><button name="action" value="back" >Go main menu</button></p>
+    </c:when>
+    <c:when test="${user.role == 'ADMIN'}">
+      <p><button name="action" value="returnUserTicket" >Return user ticket</button></p>
+      <p><button name="action" value="editRole" >Edit role</button></p>
+      <p><button name="action" value="delete" >Delete user</button></p>
+      <p><button name="action" value="back" >Go main menu</button></p>
+    </c:when>
+    <c:when test="${user.role == 'SUPER_ADMIN'}">
+      <p><button name="action" value="returnUserTicket" >Return user ticket</button></p>
+      <p><button name="action" value="editRole" >Edit role</button></p>
+      <p><button name="action" value="delete" >Delete user</button></p>
+      <p><button name="action" value="back" >Go main menu</button></p>
+    </c:when>
+  </c:choose>
 </form>
 </body>
 </html>

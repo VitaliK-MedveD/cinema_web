@@ -26,7 +26,7 @@ public class ReadUsersController extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         HttpSession session = req.getSession();
         User user = (User) session.getAttribute(USER);
-        List<User> users = userService.getAllUsers();
+        List<User> users = userService.getUsers();
         users.removeIf(person -> person.getRole().equals(Role.SUPER_ADMIN));
         users.removeIf(person -> person.getLogin().equals(user.getLogin()));
         req.setAttribute(USERS, users);
