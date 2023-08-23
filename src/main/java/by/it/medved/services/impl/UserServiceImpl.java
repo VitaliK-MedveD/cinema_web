@@ -1,5 +1,6 @@
 package by.it.medved.services.impl;
 
+import by.it.medved.config.MailProperties;
 import by.it.medved.dto.UserRequest;
 import by.it.medved.dto.UserResponse;
 import by.it.medved.entities.User;
@@ -17,6 +18,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 
+    private final MailProperties mailProperties;
     private final UserRepository userRepository;
     private final UserMapper userMapper;
 
