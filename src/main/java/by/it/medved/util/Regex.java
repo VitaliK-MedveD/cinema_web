@@ -1,7 +1,5 @@
 package by.it.medved.util;
 
-import java.time.format.DateTimeFormatter;
-
 public final class Regex {
 
     public static final String LOGIN = "^[A-Za-z]\\w{3,29}$";

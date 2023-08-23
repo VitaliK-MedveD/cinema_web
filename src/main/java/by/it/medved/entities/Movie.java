@@ -1,25 +1,25 @@
 package by.it.medved.entities;
 
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 import static by.it.medved.util.Columns.*;
+import static by.it.medved.util.Columns.COUNT_FREE_TICKETS;
 
-
+@Entity
+@Table(name = "MOVIE")
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity
-@Table(name = "MOVIE")
 public class Movie {
 
     @Id
@@ -43,5 +43,5 @@ public class Movie {
     private int countFreeTickets;
 
     @OneToMany(mappedBy = "movie", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Ticket> tickets = new ArrayList<>();
+    private List<Ticket> tickets;
 }

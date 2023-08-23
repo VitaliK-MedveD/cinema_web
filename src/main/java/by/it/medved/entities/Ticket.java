@@ -1,24 +1,23 @@
 package by.it.medved.entities;
 
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 import static by.it.medved.util.Columns.*;
 
-
+@Entity
+@Table(name = "TICKET")
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity
-@Table(name = "TICKET")
-public class Ticket{
+public class Ticket {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -44,5 +43,4 @@ public class Ticket{
 
     @Column(name = PRICE)
     private BigDecimal price;
-
 }

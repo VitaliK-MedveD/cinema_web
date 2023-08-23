@@ -1,0 +1,17 @@
+spring:
+  application:
+    name: cinema_web
+  datasource:
+    url: jdbc:postgresql://localhost:5432/cinema
+    driver-class-name: org.postgresql.Driver
+    username: root
+    password: root
+  jpa:
+    hibernate:
+      ddl-auto: update
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+  cloud:
+    config:
+      enabled: false
+server:
+  port: 8081

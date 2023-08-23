@@ -1,17 +1,17 @@
 package by.it.medved.entities;
 
 import by.it.medved.enums.Role;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.List;
 
 import static by.it.medved.util.Columns.*;
-import static javax.persistence.EnumType.STRING;
+import static jakarta.persistence.EnumType.STRING;
 
 @Entity
 @Table(name = "PERSON")
