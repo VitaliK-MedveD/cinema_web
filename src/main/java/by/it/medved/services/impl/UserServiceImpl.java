@@ -32,14 +32,14 @@ public class UserServiceImpl implements UserService {
     public UserResponse getUserById(Long id) {
         return userRepository.findById(id)
                 .map(userMapper::buildUserResponse)
-                .orElseThrow(() -> new EntityNotFoundException("user with id '" + id + "' does not exist"));
+                .orElseThrow(() -> new EntityNotFoundException("User with id '" + id + "' does not exist"));
     }
 
     @Override
     public UserResponse getUserByLogin(String login) {
         return userRepository.findUserByLogin(login)
                 .map(userMapper::buildUserResponse)
-                .orElseThrow(() -> new EntityNotFoundException("user not found"));
+                .orElseThrow(() -> new EntityNotFoundException("User with login '" + login + "' does not exist"));
     }
 
     @Override
@@ -53,10 +53,9 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserResponse updateRole(Long id, Role role) {
         User updateUser = userRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("user not found"));
+                .orElseThrow(() -> new EntityNotFoundException("User with id '" + id + "' does not exist"));
         updateUser.setRole(role);
-        User savedUser = userRepository.save(updateUser);
-        return userMapper.buildUserResponse(savedUser);
+        return userMapper.buildUserResponse(userRepository.save(updateUser));
     }
 
     @Override

@@ -11,12 +11,14 @@ public final class Message {
     public static final String INVALID_PLACES = "No free places.";
     public static final String INCORRECT_CURRENT_PASSWORD = "Incorrect current password!";
     public static final String PASSWORDS_MISMATCH = "Passwords mismatch!";
-    public static final String REGEX_PASSWORD = "Пароль должен содержать от 6 до 20 симвлов из цифр и " +
-            "латинских букв верхнего и нижнего регистра";
-    public static final String REGEX_FIRST_NAME = "Имя должно содержать от 4 до 20 симвлов из руских и " +
-            "латинских букв верхнего и нижнего регистра";
-    public static final String REGEX_EMAIL = "Doesn't match email format";
-    public static final String REGEX_DATE = "Date input format: YYYY-MM-DD";
+    public static final String REGEX_LOGIN = "Login must contain between 4 and 30 characters from upper and " +
+            "lower case Latin letters";
+    public static final String REGEX_PASSWORD = "Password must contain between 6 and 20 characters from " +
+            "numerals and Latin letters of upper and lower case";
+    public static final String REGEX_FIRST_NAME = "The name must contain between 4 and 20 characters from " +
+            "Russian and Latin upper and lower case letters";
+    public static final String REGEX_EMAIL = "Doesn't match the email format";
+    public static final String REGEX_DATE = "Date input format must match: YYYY-MM-DD";
     public static final String UPDATE_SUCCESSFUL = "Update successful";
     public static final String BUY_SUCCESSFULLY = "Ticket buy successfully";
     public static final String RETURN_SUCCESSFULLY = "Ticket return successfully";

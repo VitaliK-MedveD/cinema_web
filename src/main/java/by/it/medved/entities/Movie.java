@@ -8,11 +8,9 @@ import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 import static by.it.medved.util.Columns.*;
-import static by.it.medved.util.Columns.COUNT_FREE_TICKETS;
 
 @Entity
 @Table(name = "MOVIE")
