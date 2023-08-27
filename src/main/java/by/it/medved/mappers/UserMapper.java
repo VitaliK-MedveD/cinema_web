@@ -37,7 +37,7 @@ public class UserMapper {
                 .password(encryptedPassword)
                 .firstName(userRequest.getFirstName())
                 .email(userRequest.getEmail())
-                .dateBirthday(userRequest.getDateBirthday())
+                .dateBirthday(LocalDate.parse(userRequest.getDateBirthday()))
                 .dateCreated(LocalDate.now())
                 .salt(salt)
                 .build();

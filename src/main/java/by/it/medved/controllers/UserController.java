@@ -4,20 +4,23 @@ import by.it.medved.dto.UserRequest;
 import by.it.medved.dto.UserResponse;
 import by.it.medved.enums.Role;
 import by.it.medved.services.UserService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Validated
 @RestController
-@RequestMapping("/v1")
+@RequestMapping("api/v1")
 @RequiredArgsConstructor
 public class UserController {
 
     private final UserService userService;
 
     @PostMapping("/userSave")
-    public UserResponse saveUser(@RequestBody UserRequest userRequest) {
+    public UserResponse saveUser(@Valid @RequestBody UserRequest userRequest) {
         return userService.saveUser(userRequest);
     }
 

@@ -32,7 +32,7 @@ public class UserServiceImpl implements UserService {
     public UserResponse getUserById(Long id) {
         return userRepository.findById(id)
                 .map(userMapper::buildUserResponse)
-                .orElseThrow(() -> new EntityNotFoundException("user not found"));
+                .orElseThrow(() -> new EntityNotFoundException("user with id '" + id + "' does not exist"));
     }
 
     @Override

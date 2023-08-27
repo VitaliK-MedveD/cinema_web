@@ -30,19 +30,19 @@ public class User {
     @Column(name = ROLE)
     private Role role;
 
-    @Column(unique = true, name = LOGIN)
+    @Column(unique = true, name = LOGIN, nullable = false)
     private String login;
 
     @Column(name = PASSWORD)
     private byte[] password;
 
-    @Column(name = FIRST_NAME)
+    @Column(name = FIRST_NAME, nullable = false)
     private String firstName;
 
-    @Column(name = EMAIL)
+    @Column(name = EMAIL, nullable = false)
     private String email;
 
-    @Column(name = DATE_BIRTHDAY)
+    @Column(name = DATE_BIRTHDAY, nullable = false)
     private LocalDate dateBirthday;
 
     @Column(name = DATE_CREATED)
