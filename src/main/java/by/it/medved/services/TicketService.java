@@ -15,9 +15,9 @@ public interface TicketService {
 
     TicketResponse getTicketById(Long id);
 
-    List<Ticket> getUserTickets(Long userId);
+    List<TicketResponse> getUserTickets(Long userId);
 
-    List<Ticket> getMovieTickets(Long movieId);
+    List<TicketResponse> getMovieTickets(Long movieId);
 
     void updateMovieTickets(Long movieId, LocalDateTime showDateTime, BigDecimal price);
 

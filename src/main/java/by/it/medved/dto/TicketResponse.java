@@ -15,4 +15,5 @@ public class TicketResponse {
     private LocalDateTime showDateTime;
     private int numberOfPlace;
     private BigDecimal price;
+    private Long userId;
 }

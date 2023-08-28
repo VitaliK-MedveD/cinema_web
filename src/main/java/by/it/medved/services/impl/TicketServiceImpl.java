@@ -47,18 +47,24 @@ public class TicketServiceImpl implements TicketService {
     }
 
     @Override
-    public List<Ticket> getUserTickets(Long userId) {
-        return ticketRepository.findTicketsByUserId(userId);
+    public List<TicketResponse> getUserTickets(Long userId) {
+        return ticketRepository.findTicketsByUserId(userId)
+                .stream()
+                .map(ticketMapper::buildTicketResponse)
+                .toList();
     }
 
     @Override
-    public List<Ticket> getMovieTickets(Long movieId) {
-        return ticketRepository.findTicketsByMovieId(movieId);
+    public List<TicketResponse> getMovieTickets(Long movieId) {
+        return ticketRepository.findTicketsByMovieId(movieId)
+                .stream()
+                .map(ticketMapper::buildTicketResponse)
+                .toList();
     }
 
     @Override
     public void updateMovieTickets(Long movieId, LocalDateTime showDateTime, BigDecimal price) {
-        getMovieTickets(movieId).stream()
+        ticketRepository.findTicketsByMovieId(movieId).stream()
                 .forEach(ticket -> {
                     ticket.setShowDateTime(showDateTime);
                     ticket.setPrice(price);
@@ -68,7 +74,7 @@ public class TicketServiceImpl implements TicketService {
 
     @Override
     public int getCountFreeTickets(Long movieId) {
-        return (int) getMovieTickets(movieId).stream()
+        return (int) ticketRepository.findTicketsByMovieId(movieId).stream()
                 .filter(ticket -> ticket.getUser() == null)
                 .count();
     }

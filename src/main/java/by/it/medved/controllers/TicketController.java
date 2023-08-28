@@ -24,12 +24,12 @@ public class TicketController {
     }
 
     @GetMapping("/ticketsByUser/{userId}")
-    public List<Ticket> getUserTickets(@PathVariable Long userId) {
+    public List<TicketResponse> getUserTickets(@PathVariable Long userId) {
         return ticketService.getUserTickets(userId);
     }
 
     @GetMapping("/ticketsByMovie/{movieId}")
-    public List<Ticket> getMovieTickets(@PathVariable Long movieId) {
+    public List<TicketResponse> getMovieTickets(@PathVariable Long movieId) {
         return ticketService.getMovieTickets(movieId);
     }
 }
