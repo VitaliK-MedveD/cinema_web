@@ -1,8 +1,8 @@
 package by.it.medved.controllers;
 
-import by.it.medved.dto.MovieRequest;
-import by.it.medved.dto.MovieResponse;
-import by.it.medved.dto.UpdateMovieRequest;
+import by.it.medved.annotations.ExcludeLog;
+import by.it.medved.dto.request.MovieRequest;
+import by.it.medved.dto.response.MovieResponse;
 import by.it.medved.services.MovieService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -19,31 +19,29 @@ public class MovieController {
 
     private final MovieService movieService;
 
-    @PostMapping("movieSave")
-    public MovieResponse addMovie(@Valid @RequestBody MovieRequest movieRequest) {
-        return movieService.addMovie(movieRequest);
+    @PostMapping("/movie")
+    public MovieResponse saveMovie(@Valid @RequestBody MovieRequest movieRequest) {
+        return movieService.saveMovie(movieRequest);
     }
 
+    @ExcludeLog
     @GetMapping("/movieById/{id}")
     public MovieResponse getMovieById(@PathVariable Long id) {
         return movieService.getMovieById(id);
     }
 
+    @ExcludeLog
     @GetMapping("/movies")
     public List<MovieResponse> getMovies() {
         return movieService.getMovies();
     }
 
-    @GetMapping("/movieUpdate")
-    public MovieResponse updateMovie(@RequestBody UpdateMovieRequest updateMovieRequest) {
-        return movieService.updateMovie(
-                updateMovieRequest.getId(),
-                updateMovieRequest.getShowDateTime(),
-                updateMovieRequest.getPrice()
-        );
+    @PatchMapping(value = "/movie/{id}")
+    public MovieResponse updateMovie(@PathVariable Long id, @Valid @RequestBody MovieRequest movieRequest) {
+        return movieService.updateMovie(id, movieRequest);
     }
 
-    @GetMapping("/movieDelete/{id}")
+    @DeleteMapping(value = "/movie/{id}")
     public void deleteMovie(@PathVariable Long id) {
         movieService.deleteMovie(id);
     }

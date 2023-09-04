@@ -1,4 +1,4 @@
-package by.it.medved.dto;
+package by.it.medved.dto.response;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.Builder;
@@ -8,6 +8,5 @@ import lombok.Getter;
 @Builder
 public class DescriptionResponse {
 
-    @NotBlank
     private String description;
 }

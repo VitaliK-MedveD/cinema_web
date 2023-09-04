@@ -1,7 +1,9 @@
 package by.it.medved.services.impl;
 
+import by.it.medved.config.EncryptionConfiguration;
+import by.it.medved.exceptions.EncryptionException;
 import by.it.medved.services.EncryptionService;
-import by.it.medved.util.EncryptAlgorithmConstants;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import javax.crypto.SecretKeyFactory;
@@ -13,32 +15,35 @@ import java.security.spec.KeySpec;
 import java.util.Arrays;
 
 @Service
+@RequiredArgsConstructor
 public class EncryptionServiceImpl implements EncryptionService {
+
+    private final EncryptionConfiguration encryptionConfiguration;
 
     @Override
     public byte[] generateSalt() {
-        SecureRandom random = new SecureRandom();
+        SecureRandom random;
         try {
-            random = SecureRandom.getInstance(EncryptAlgorithmConstants.SHA1);
-        } catch (NoSuchAlgorithmException e) {
-            throw new RuntimeException(e);
+            random = SecureRandom.getInstance(encryptionConfiguration.getCryptographicHashingAlgorithm());
+        } catch (NoSuchAlgorithmException exception) {
+            throw new EncryptionException(exception.getMessage());
         }
-        byte[] salt = new byte[8];
+        byte[] salt = new byte[encryptionConfiguration.getSaltLength()];
         random.nextBytes(salt);
         return salt;
     }
 
     @Override
     public byte[] getEncryptedPassword(String password, byte[] salt) {
-        int derivedKeyLength = 128;
-        int iterations = 20000;
+        int derivedKeyLength = encryptionConfiguration.getDerivedKeyLength();
+        int iterations = encryptionConfiguration.getIterations();
         KeySpec spec = new PBEKeySpec(password.toCharArray(), salt, iterations, derivedKeyLength);
-        SecretKeyFactory factory = null;
+        SecretKeyFactory factory;
         try {
-            factory = SecretKeyFactory.getInstance(EncryptAlgorithmConstants.PBKDF2);
+            factory = SecretKeyFactory.getInstance(encryptionConfiguration.getKeyGenerationAlgorithm());
             return factory.generateSecret(spec).getEncoded();
-        } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
-            throw new RuntimeException(e);
+        } catch (NoSuchAlgorithmException | InvalidKeySpecException exception) {
+            throw new EncryptionException(exception.getMessage());
         }
     }
 

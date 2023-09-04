@@ -1,7 +1,7 @@
 package by.it.medved.services.impl;
 
-import by.it.medved.dto.MovieRequest;
-import by.it.medved.dto.MovieResponse;
+import by.it.medved.dto.request.MovieRequest;
+import by.it.medved.dto.response.MovieResponse;
 import by.it.medved.entities.Movie;
 import by.it.medved.mappers.MovieMapper;
 import by.it.medved.repositories.MovieRepository;
@@ -11,9 +11,10 @@ import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
-import java.time.LocalDateTime;
 import java.util.List;
+
+import static by.it.medved.util.Message.*;
+import static java.lang.String.format;
 
 @Service
 @RequiredArgsConstructor
@@ -24,37 +25,38 @@ public class MovieServiceImpl implements MovieService {
     private final MovieMapper movieMapper;
 
     @Override
-    public MovieResponse addMovie(MovieRequest movieRequest) {
-        Movie movie = movieMapper.buildMovie(movieRequest);
+    public MovieResponse saveMovie(MovieRequest movieRequest) {
+        Movie movie = movieMapper.mapToMovie(movieRequest);
         movie.setTickets(ticketService.addTenTickets(movie));
-        movie.setCountFreeTickets(ticketService.getCountFreeTickets(movie.getId()));
-        return movieMapper.buildMovieResponse(movieRepository.save(movie));
+        Movie savedMovie = movieRepository.save(movie);
+        return movieMapper.mapToMovieResponse(savedMovie);
     }
 
     @Override
     public MovieResponse getMovieById(Long id) {
         return movieRepository.findById(id)
-                .map(movieMapper::buildMovieResponse)
-                .orElseThrow(() -> new EntityNotFoundException("Movie with id '" + id + "' does not exist"));
+                .map(movieMapper::mapToMovieResponse)
+                .orElseThrow(() -> new EntityNotFoundException(format(MOVIE_BY_ID_NOT_EXIST, id)));
     }
 
     @Override
     public List<MovieResponse> getMovies() {
-        return movieRepository.findAll().stream()
-                .map(movieMapper::buildMovieResponse)
+        return movieRepository.findAll()
+                .stream()
+                .map(movieMapper::mapToMovieResponse)
                 .toList();
     }
 
     @Override
-    public MovieResponse updateMovie(Long id, String showDateTime, String price) {
-        LocalDateTime dateTime = LocalDateTime.parse(showDateTime);
-        BigDecimal bigDecimalPrice = BigDecimal.valueOf(Double.parseDouble(price));
+    public MovieResponse updateMovie(Long id, MovieRequest movieRequest) {
         Movie updateMovie = movieRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Movie with id '" + id + "' does not exist"));
-        updateMovie.setShowDateTime(dateTime);
-        updateMovie.setPrice(bigDecimalPrice);
-        ticketService.updateMovieTickets(id, dateTime, bigDecimalPrice);
-        return movieMapper.buildMovieResponse(movieRepository.save(updateMovie));
+                .orElseThrow(() -> new EntityNotFoundException(format(MOVIE_BY_ID_NOT_EXIST, id)));
+        updateMovie.setMovieTitle(movieRequest.getMovieTitle());
+        updateMovie.setShowDateTime(movieRequest.getShowDateTime());
+        updateMovie.setPrice(movieRequest.getPrice());
+        updateMovie.setAgeLimit(movieRequest.getAgeLimit());
+        Movie savedMovie = movieRepository.save(updateMovie);
+        return movieMapper.mapToMovieResponse(savedMovie);
     }
 
     @Override

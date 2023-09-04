@@ -1,7 +1,7 @@
 package by.it.medved.controllers;
 
-import by.it.medved.dto.UserRequest;
-import by.it.medved.dto.UserResponse;
+import by.it.medved.dto.request.UserRequest;
+import by.it.medved.dto.response.UserResponse;
 import by.it.medved.enums.Role;
 import by.it.medved.services.UserService;
 import jakarta.validation.Valid;
@@ -19,7 +19,7 @@ public class UserController {
 
     private final UserService userService;
 
-    @PostMapping("/userSave")
+    @PostMapping("/user")
     public UserResponse saveUser(@Valid @RequestBody UserRequest userRequest) {
         return userService.saveUser(userRequest);
     }
@@ -39,12 +39,12 @@ public class UserController {
         return userService.getUsers();
     }
 
-    @GetMapping("/userUpdateRole/{id}/{role}")
+    @PatchMapping("/user/{id}/{role}")
     public UserResponse updateRole(@PathVariable Long id, @PathVariable Role role) {
         return userService.updateRole(id, role);
     }
 
-    @GetMapping("/userDelete/{id}")
+    @DeleteMapping("/user/{id}")
     public void deleteUser(@PathVariable Long id) {
         userService.deleteUser(id);
     }

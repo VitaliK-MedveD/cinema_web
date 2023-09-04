@@ -1,4 +1,4 @@
-package by.it.medved.dto;
+package by.it.medved.dto.response;
 
 import lombok.Builder;
 import lombok.Data;
@@ -14,6 +14,6 @@ public class MovieResponse {
     private String movieTitle;
     private LocalDateTime showDateTime;
     private BigDecimal price;
-    private int ageLimit;
-    private int countFreeTickets;
+    private Integer ageLimit;
+    private Integer freeTicketsCount;
 }

@@ -1,7 +1,7 @@
 package by.it.medved.services;
 
-import by.it.medved.dto.UserRequest;
-import by.it.medved.dto.UserResponse;
+import by.it.medved.dto.request.UserRequest;
+import by.it.medved.dto.response.UserResponse;
 import by.it.medved.enums.Role;
 
 import java.util.List;

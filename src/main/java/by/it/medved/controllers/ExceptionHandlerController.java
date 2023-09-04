@@ -1,20 +1,20 @@
 package by.it.medved.controllers;
 
-import by.it.medved.dto.ErrorResponse;
+import by.it.medved.dto.response.ErrorResponse;
+import by.it.medved.errors.Error;
+import by.it.medved.exceptions.EncryptionException;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.context.support.DefaultMessageSourceResolvable;
-import org.springframework.http.HttpStatus;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import java.time.LocalDateTime;
-import java.util.Collections;
 import java.util.List;
+
+import static java.time.LocalDateTime.now;
+import static org.springframework.http.HttpStatus.*;
 
 @Slf4j
 @RestControllerAdvice
@@ -22,30 +22,42 @@ import java.util.List;
 public class ExceptionHandlerController {
 
     @ExceptionHandler(EntityNotFoundException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ResponseStatus(BAD_REQUEST)
     public ErrorResponse handleUserNotFoundException(EntityNotFoundException exception) {
-        log.warn("Exception: ", exception.getMessage());
+        log.warn("Exception: {}", exception.getMessage());
         return ErrorResponse.builder()
-                .errorMessages(Collections.singletonList(exception.getMessage()))
-                .errorCount(1)
-                .httpStatus(HttpStatus.BAD_REQUEST)
-                .time(LocalDateTime.now())
+                .message(exception.getMessage())
+                .httpStatus(BAD_REQUEST)
+                .time(now())
                 .build();
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ErrorResponse handleValidationException(MethodArgumentNotValidException exception) {
-        List<FieldError> fieldErrors = exception.getFieldErrors();
-        List<String> list = fieldErrors.stream()
-                .map(FieldError::getField)
-                .toList();
+        log.warn("Exception: {}", exception.getMessage());
         return ErrorResponse.builder()
-                .errorMessages(exception.getAllErrors().stream()
-                        .map(DefaultMessageSourceResolvable::getDefaultMessage)
-                        .toList())
-                .errorCount(exception.getErrorCount())
-                .httpStatus(HttpStatus.BAD_REQUEST)
-                .time(LocalDateTime.now())
+                .errors(getErrors(exception))
+                .errorsCount(exception.getErrorCount())
+                .httpStatus(BAD_REQUEST)
+                .time(now())
                 .build();
+    }
+
+    @ExceptionHandler(EncryptionException.class)
+    public ErrorResponse handleEncryptionException(EncryptionException exception) {
+        log.warn("Exception: {}", exception.getMessage());
+        return ErrorResponse.builder()
+                .message(exception.getMessage())
+                .httpStatus(INTERNAL_SERVER_ERROR)
+                .time(now())
+                .build();
+    }
+
+    private List<Error> getErrors(MethodArgumentNotValidException exception) {
+        return exception.getBindingResult()
+                .getFieldErrors()
+                .stream()
+                .map(fieldError -> new Error(fieldError.getDefaultMessage(), fieldError.getField()))
+                .toList();
     }
 }

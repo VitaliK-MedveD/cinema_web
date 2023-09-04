@@ -1,6 +1,6 @@
 package by.it.medved.services.impl;
 
-import by.it.medved.dto.DescriptionResponse;
+import by.it.medved.dto.response.DescriptionResponse;
 import by.it.medved.feingClients.DescriptionClient;
 import by.it.medved.services.DescriptionService;
 import lombok.RequiredArgsConstructor;

@@ -1,4 +1,4 @@
-package by.it.medved.dto;
+package by.it.medved.dto.response;
 
 import by.it.medved.enums.Role;
 import lombok.Builder;

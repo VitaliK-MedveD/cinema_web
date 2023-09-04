@@ -1,12 +1,9 @@
 package by.it.medved.services;
 
-import by.it.medved.dto.TicketResponse;
+import by.it.medved.dto.response.TicketResponse;
 import by.it.medved.entities.Movie;
 import by.it.medved.entities.Ticket;
-import by.it.medved.entities.User;
 
-import java.math.BigDecimal;
-import java.time.LocalDateTime;
 import java.util.List;
 
 public interface TicketService {
@@ -19,7 +16,5 @@ public interface TicketService {
 
     List<TicketResponse> getMovieTickets(Long movieId);
 
-    void updateMovieTickets(Long movieId, LocalDateTime showDateTime, BigDecimal price);
-
-    int getCountFreeTickets (Long movieId);
+    Integer getFreeTicketsCount(Long movieId);
 }

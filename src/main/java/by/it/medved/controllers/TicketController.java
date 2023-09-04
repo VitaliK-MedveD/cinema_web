@@ -1,7 +1,6 @@
 package by.it.medved.controllers;
 
-import by.it.medved.dto.TicketResponse;
-import by.it.medved.entities.Ticket;
+import by.it.medved.dto.response.TicketResponse;
 import by.it.medved.services.TicketService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,7 +17,7 @@ public class TicketController {
 
     private final TicketService ticketService;
 
-    @GetMapping("/ticketById/{id}")
+    @GetMapping("/ticket/{id}")
     public TicketResponse getTicketById(@PathVariable Long id) {
         return ticketService.getTicketById(id);
     }

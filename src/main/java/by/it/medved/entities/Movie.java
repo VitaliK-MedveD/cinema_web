@@ -12,12 +12,12 @@ import java.util.List;
 
 import static by.it.medved.util.Columns.*;
 
-@Entity
-@Table(name = "MOVIE")
 @Data
+@Entity
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@Table(name = "MOVIE")
 public class Movie {
 
     @Id
@@ -35,10 +35,10 @@ public class Movie {
     private BigDecimal price;
 
     @Column(name = AGE_LIMIT)
-    private int ageLimit;
+    private Integer ageLimit;
 
-    @Column(name = COUNT_FREE_TICKETS)
-    private int countFreeTickets;
+    @Transient
+    private Integer freeTicketsCount;
 
     @OneToMany(mappedBy = "movie", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Ticket> tickets;
