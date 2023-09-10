@@ -1,32 +1,32 @@
 package by.it.medved.services;
 
+import by.it.medved.dto.request.AuthenticationRequest;
+import by.it.medved.dto.request.ChangePasswordRequest;
+import by.it.medved.dto.request.UpdateUserRequest;
+import by.it.medved.dto.request.UserRequest;
+import by.it.medved.dto.response.UserResponse;
 import by.it.medved.entities.User;
 import by.it.medved.enums.Role;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface UserService {
 
-    User createUser(User user);
+    UserResponse saveUser(UserRequest userRequest);
 
-    User getUserById(Long id);
+    UserResponse authentication(AuthenticationRequest authenticationRequest);
 
-    List<User> getUsers();
+    UserResponse getUserById(Long id);
 
-    User changeUserPassword(String newPassword, Long userId);
+    public User getUser(Long id);
 
-    boolean updateRole(Long id, Role role);
+    List<UserResponse> getUsers();
 
-    User updateUserFields(Long id, String firstName, String email, String dateBirthday);
+    UserResponse changePassword(Long id, ChangePasswordRequest changePasswordRequest);
 
-    void deleteUserById(Long id);
+    UserResponse updateRole(Long id, Role role);
 
-    Optional<User> getUserByLogin(String login);
+    UserResponse updateUser(Long id, UpdateUserRequest updateUserRequest);
 
-    boolean checkLine(String line, String regex);
-
-    boolean checkDate(String line, String regex);
-
-    boolean checkUniqueLogin(String login);
+    void deleteUser(Long id);
 }

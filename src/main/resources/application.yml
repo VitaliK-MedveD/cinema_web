@@ -1,0 +1,11 @@
+spring:
+  application:
+    name: cinema_web
+  cloud:
+    config:
+      enabled: true
+      uri: http://localhost:8888
+  profiles:
+    active: dev
+server:
+  port: 8081

@@ -1,24 +1,22 @@
 package by.it.medved.entities;
 
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 import static by.it.medved.util.Columns.*;
 
-
 @Data
+@Entity
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity
 @Table(name = "MOVIE")
 public class Movie {
 
@@ -37,11 +35,8 @@ public class Movie {
     private BigDecimal price;
 
     @Column(name = AGE_LIMIT)
-    private int ageLimit;
-
-    @Column(name = COUNT_FREE_TICKETS)
-    private int countFreeTickets;
+    private Integer ageLimit;
 
     @OneToMany(mappedBy = "movie", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Ticket> tickets = new ArrayList<>();
+    private List<Ticket> tickets;
 }

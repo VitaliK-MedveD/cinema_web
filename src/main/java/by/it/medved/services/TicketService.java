@@ -1,38 +1,26 @@
 package by.it.medved.services;
 
+import by.it.medved.dto.request.BuyTicketsRequest;
+import by.it.medved.dto.response.TicketResponse;
 import by.it.medved.entities.Movie;
 import by.it.medved.entities.Ticket;
 import by.it.medved.entities.User;
 
-import java.math.BigDecimal;
-import java.time.LocalDateTime;
 import java.util.List;
 
 public interface TicketService {
 
-    List<Ticket> addTenTickets(Movie movie);
+    List<TicketResponse> buyTickets(User user, BuyTicketsRequest buyTicketsRequest);
 
-    Ticket getTicketById(Long id);
+    TicketResponse getTicketById(Long id);
 
-    List<Ticket> getUserTickets(Long userId);
+    List<TicketResponse> getUserTickets(Long userId);
 
-    List<Ticket> getMovieTickets(Long movieId);
+    List<TicketResponse> getMovieTickets(Long movieId);
 
-    void updateMovieTickets(Long movieId, LocalDateTime showDateTime, BigDecimal price);
-
-    int getCountFreeTickets (Long movieId);
-
-    boolean buyTicket(User user, Movie movie);
-
-    boolean returnTicket(Ticket ticket);
+    void returnTicket(Long id);
 
     void returnUserTickets(Long userId);
 
-    void returnMovieTickets(Long movieId);
-
-    void deleteMovieTickets(Long movieId);
-
-    String getErrorMessage();
-
-    Ticket getTicket();
+    Integer getFreeTicketsCount(Long movieId);
 }

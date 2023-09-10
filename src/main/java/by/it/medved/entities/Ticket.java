@@ -1,24 +1,20 @@
 package by.it.medved.entities;
 
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.*;
-import java.math.BigDecimal;
-import java.time.LocalDateTime;
-
 import static by.it.medved.util.Columns.*;
 
-
 @Data
+@Entity
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity
 @Table(name = "TICKET")
-public class Ticket{
+public class Ticket {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,23 +22,13 @@ public class Ticket{
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = MOVIE_ID)
+    @JoinColumn(name = MOVIE_ID, nullable = false, updatable = false)
     private Movie movie;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = USER_ID)
     private User user;
 
-    @Column(name = MOVIE_TITLE)
-    private String movieTitle;
-
-    @Column(name = SHOW_DATE_TIME)
-    private LocalDateTime showDateTime;
-
-    @Column(name = NUMBER_PLACE)
-    private int numberOfPlace;
-
-    @Column(name = PRICE)
-    private BigDecimal price;
-
+    @Column(name = PLACE_NUMBER, updatable = false, nullable = false)
+    private Integer placeNumber;
 }

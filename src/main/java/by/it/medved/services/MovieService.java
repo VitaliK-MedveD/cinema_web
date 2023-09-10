@@ -1,18 +1,20 @@
 package by.it.medved.services;
 
-import by.it.medved.entities.Movie;
+import by.it.medved.dto.request.MovieRequest;
+import by.it.medved.dto.request.UpdateMovieRequest;
+import by.it.medved.dto.response.MovieResponse;
 
 import java.util.List;
 
 public interface MovieService {
 
-    Movie addMovie(Movie movie);
+    MovieResponse saveMovie(MovieRequest movieRequest);
 
-    Movie getMovieById(Long id);
+    MovieResponse getMovieById(Long id);
 
-    List<Movie> getMovies();
+    List<MovieResponse> getMovies();
 
-    Movie updateMovie(Long id, String showDateTime, String price);
+    MovieResponse updateMovie(Long id, UpdateMovieRequest updateMovieRequest);
 
     void deleteMovie(Long id);
 }
