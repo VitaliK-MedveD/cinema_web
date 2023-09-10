@@ -13,12 +13,8 @@ import static by.it.medved.util.Patterns.*;
 
 @Data
 @Builder
-public class UserRequest {
+public class UpdateUserRequest {
 
-    @Pattern(regexp = LOGIN, message = LOGIN_REQUIREMENTS)
-    private String login;
-    @Pattern(regexp = PASSWORD, message = PASSWORD_REQUIREMENTS)
-    private String password;
     @NotBlank
     private String firstName;
     @Pattern(regexp = EMAIL, message = EMAIL_REQUIREMENTS)

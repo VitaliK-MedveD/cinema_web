@@ -5,6 +5,7 @@ import by.it.medved.exceptions.EncryptionException;
 import by.it.medved.services.EncryptionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
@@ -21,6 +22,7 @@ public class EncryptionServiceImpl implements EncryptionService {
     private final EncryptionConfiguration encryptionConfiguration;
 
     @Override
+    @Transactional(readOnly = true)
     public byte[] generateSalt() {
         SecureRandom random;
         try {
@@ -34,6 +36,7 @@ public class EncryptionServiceImpl implements EncryptionService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public byte[] getEncryptedPassword(String password, byte[] salt) {
         int derivedKeyLength = encryptionConfiguration.getDerivedKeyLength();
         int iterations = encryptionConfiguration.getIterations();
@@ -48,6 +51,7 @@ public class EncryptionServiceImpl implements EncryptionService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public boolean authenticate(String enteredPassword, byte[] encryptedPassword, byte[] salt) {
         byte[] encryptedAttemptedPassword = getEncryptedPassword(enteredPassword, salt);
         return Arrays.equals(encryptedPassword, encryptedAttemptedPassword);

@@ -37,9 +37,6 @@ public class Movie {
     @Column(name = AGE_LIMIT)
     private Integer ageLimit;
 
-    @Transient
-    private Integer freeTicketsCount;
-
     @OneToMany(mappedBy = "movie", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Ticket> tickets;
 }

@@ -13,12 +13,12 @@ import java.util.List;
 import static by.it.medved.util.Columns.*;
 import static jakarta.persistence.EnumType.STRING;
 
-@Entity
-@Table(name = "PERSON")
 @Data
+@Entity
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@Table(name = "PERSON")
 public class User {
 
     @Id

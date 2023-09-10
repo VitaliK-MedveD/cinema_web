@@ -16,7 +16,7 @@ public class UserMapper {
 
     private final EncryptionService encryptionService;
 
-    public UserResponse mapToUserResponse(User user){
+    public UserResponse mapToUserResponse(User user) {
         return UserResponse.builder()
                 .id(user.getId())
                 .role(user.getRole())

@@ -1,7 +1,7 @@
 package by.it.medved.controllers;
 
-import by.it.medved.annotations.ExcludeLog;
 import by.it.medved.dto.request.MovieRequest;
+import by.it.medved.dto.request.UpdateMovieRequest;
 import by.it.medved.dto.response.MovieResponse;
 import by.it.medved.services.MovieService;
 import jakarta.validation.Valid;
@@ -13,8 +13,8 @@ import java.util.List;
 
 @Validated
 @RestController
-@RequestMapping("api/v1")
 @RequiredArgsConstructor
+@RequestMapping("api/v1")
 public class MovieController {
 
     private final MovieService movieService;
@@ -24,21 +24,19 @@ public class MovieController {
         return movieService.saveMovie(movieRequest);
     }
 
-    @ExcludeLog
     @GetMapping("/movieById/{id}")
     public MovieResponse getMovieById(@PathVariable Long id) {
         return movieService.getMovieById(id);
     }
 
-    @ExcludeLog
     @GetMapping("/movies")
     public List<MovieResponse> getMovies() {
         return movieService.getMovies();
     }
 
     @PatchMapping(value = "/movie/{id}")
-    public MovieResponse updateMovie(@PathVariable Long id, @Valid @RequestBody MovieRequest movieRequest) {
-        return movieService.updateMovie(id, movieRequest);
+    public MovieResponse updateMovie(@PathVariable Long id, @Valid @RequestBody UpdateMovieRequest updateMovieRequest) {
+        return movieService.updateMovie(id, updateMovieRequest);
     }
 
     @DeleteMapping(value = "/movie/{id}")

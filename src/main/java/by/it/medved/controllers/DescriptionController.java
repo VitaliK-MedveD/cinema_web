@@ -1,19 +1,19 @@
 package by.it.medved.controllers;
 
-import by.it.medved.dto.response.DescriptionResponse;
+import by.it.medved.dto.response.MovieInfoResponse;
 import by.it.medved.services.DescriptionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("api/v1")
 @RequiredArgsConstructor
+@RequestMapping("api/v1")
 public class DescriptionController {
 
     private final DescriptionService descriptionService;
 
-    @GetMapping("/description/{fileName}")
-    public DescriptionResponse getDescription(@PathVariable String fileName) {
-        return descriptionService.getDescription(fileName);
+    @GetMapping("/movieInfo/{id}")
+    public MovieInfoResponse getMovieInfo(@PathVariable int id) {
+        return descriptionService.getMovieInfo(id);
     }
 }

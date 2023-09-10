@@ -1,8 +1,8 @@
 package by.it.medved.services;
 
-import by.it.medved.dto.response.DescriptionResponse;
+import by.it.medved.dto.response.MovieInfoResponse;
 
 public interface DescriptionService {
 
-    DescriptionResponse getDescription(String fileName);
+    MovieInfoResponse getMovieInfo(int id);
 }

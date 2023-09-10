@@ -13,9 +13,8 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 
 import java.util.Optional;
 
+import static by.it.medved.util.Message.*;
 import static by.it.medved.util.Patterns.*;
-import static org.apache.commons.lang3.StringUtils.EMPTY;
-
 
 @Slf4j
 @Aspect

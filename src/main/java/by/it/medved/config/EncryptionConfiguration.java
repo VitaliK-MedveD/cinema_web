@@ -11,7 +11,7 @@ public class EncryptionConfiguration {
 
     private String cryptographicHashingAlgorithm;
     private String keyGenerationAlgorithm;
-    private int saltLength;
-    private int derivedKeyLength;
-    private int iterations;
+    private Integer saltLength;
+    private Integer derivedKeyLength;
+    private Integer iterations;
 }
