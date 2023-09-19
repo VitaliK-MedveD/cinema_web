@@ -17,9 +17,14 @@ public class Message {
             "lower case Latin letters";
     public final String PASSWORD_REQUIREMENTS = "Password must contain between 6 and 20 characters from " +
             "numerals and Latin letters of upper and lower case";
-    public final String FIRST_NAME_REQUIREMENTS = "The name must contain between 4 and 20 characters from " +
-            "Russian and Latin upper and lower case letters";
     public final String EMAIL_REQUIREMENTS = "Doesn't match the email format";
     public final String DATE_REQUIREMENTS = "Date value should be in the past";
     public final String TOKEN = "X-API-KEY=7MRRCKR-GZYMBJN-HT1WDBS-G7C0V5C";
+    public final String EXAMPLE_LOGIN = "TestUser";
+    public final String EXAMPLE_PASSWORD = "123456";
+    public final String EXAMPLE_NEW_PASSWORD = "qwerty";
+    public final String EXAMPLE_EMAIL = "TestUser@test.com";
+    public final String EXAMPLE_DATE = "2000-01-01";
+    public final String EXAMPLE_TITLE = "Example Title";
+    public final String EXAMPLE_DATE_TIME = "2023-12-25T20:00:00";
 }

@@ -2,8 +2,6 @@ package by.it.medved.services;
 
 import by.it.medved.dto.request.BuyTicketsRequest;
 import by.it.medved.dto.response.TicketResponse;
-import by.it.medved.entities.Movie;
-import by.it.medved.entities.Ticket;
 import by.it.medved.entities.User;
 
 import java.util.List;
