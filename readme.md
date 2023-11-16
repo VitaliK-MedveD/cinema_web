@@ -46,6 +46,7 @@ The project was developed using:
 ## Remote API
 
 * Cloud settings of the main application - <a href="https://github.com/VitaliK-MedveD/Settings">Settings service</a>
+* Getting information about the film from "Kinopoisk.ru"
 
 # Examples
 
