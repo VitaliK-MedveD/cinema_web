@@ -43,6 +43,10 @@ The project was developed using:
 * PostgreSQL
 * Lombok
 
+## Remote API
+
+* Cloud settings of the main application - <a href="https://github.com/VitaliK-MedveD/Settings">Settings service</a>
+
 # Examples
 
 Endpoint for user registration:
