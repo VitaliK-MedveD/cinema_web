@@ -21,6 +21,15 @@ The project developed gradually over four months of training:
 * The third month is a gradual transition to spring.
 * Month four - Spring Boot, Spring Data JPA, JUnit 5, Spring Cloud
 
+## Road map
+
+- [x] Spring Boot
+- [x] Spring Data JPA
+- [x] CRUD service for entities
+- [x] Cloud application configuration
+- [x] Remote API for getting information about the film from "Kinopoisk.ru"
+- [x] Test for service
+
 # Examples
 
 Endpoint for user registration:
