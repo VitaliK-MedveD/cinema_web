@@ -30,6 +30,19 @@ The project developed gradually over four months of training:
 - [x] Remote API for getting information about the film from "Kinopoisk.ru"
 - [x] Test for service
 
+## Technologies
+
+The project was developed using:
+
+* Spring
+    * Data JPA
+    * Validation
+    * Cloud config
+    * Test
+    * OpenFeign
+* PostgreSQL
+* Lombok
+
 # Examples
 
 Endpoint for user registration:
