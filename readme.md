@@ -73,3 +73,14 @@ GET http://localhost:8081/api/v1/movieInfo/535341
 Response:
 
 ![](images/info.bmp)
+
+## Contact
+
+Vitality Medvedev - vitalik.medved@gmail.com
+
+Project Link: [https://github.com/VitaliK-MedveD?tab=repositories](https://github.com/VitaliK-MedveD?tab=repositories)
+
+## My trainers
+
+Aleksandr Moskalchuk - moskalchukaleksandr@gmail.com  
+Dmitriy Steba - stebadmitriy@gmail.com 
