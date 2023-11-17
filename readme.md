@@ -56,11 +56,13 @@ POST http://localhost:8081/api/v1/user
 
 JSON body:
 
-{"login": "test_b7",
+{
+"login": "test_b7",
 "password": "123456",
 "firstName": "test_73",
 "email": "test@test.by",
-"dateBirthday": "2000-06-14"}
+"dateBirthday": "2000-06-14"
+}
 
 Response:
 
